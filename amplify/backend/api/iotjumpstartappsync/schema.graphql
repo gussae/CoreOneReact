@@ -1,0 +1,20 @@
+type SensorValue @model (subscriptions: null)
+@auth (
+    rules: [
+        { allow: private, provider: iam},
+        { allow: private, provider: userPools}
+    ]
+) 
+{
+  id: ID!
+  sensorId: String!
+  valueType: String!
+  value: Float!
+  status: Int!
+  timestamp: AWSTimestamp!
+}
+
+type Subscription {
+  onCreateSensorValue(sensorId: String!): SensorValue @aws_subscribe(mutations: ["createSensorValue"])
+  onCreateSensorValues: SensorValue @aws_subscribe(mutations: ["createSensorValue"])
+}

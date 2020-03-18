@@ -1,0 +1,47 @@
+{
+    "Parameters": {
+		"env": {
+			"Type": "String"
+        },
+        "functioncreatesensorvalueArn": {
+			"Type": "String"
+		}
+	},
+    "Resources": {
+        "CreateSensorValueRule": {
+            "Type": "AWS::IoT::TopicRule",
+            "Properties": {
+                "TopicRulePayload": {
+                    "Actions": [
+                        {
+                            "Lambda": {
+                                "FunctionArn": {"Ref":"functioncreatesensorvalueArn"}
+                            }
+                        }
+                    ],
+                    "RuleDisabled": false,
+                    "Sql": "select * as data, topic(4) as sensorId from 'dt/bay-health/SF/+/sensor-value'"
+                }
+            }
+        },
+        "createsensorvalueallowIOTRuleInvocation": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "FunctionName": { 
+                    "Fn::Select" : [ "6", {
+                         "Fn::Split": [":", {"Ref": "functioncreatesensorvalueArn"}]
+                         }
+                    ] 
+                },
+                "Principal": "iot.amazonaws.com",
+                "SourceArn": {
+                    "Fn::GetAtt": [
+                        "CreateSensorValueRule",
+                        "Arn"
+                    ]
+                }
+            }
+        }
+    }
+}

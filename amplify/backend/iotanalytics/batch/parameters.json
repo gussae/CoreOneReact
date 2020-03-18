@@ -1,0 +1,11 @@
+{
+    "ProjectName": "myIoTAnalyticsProjectb",
+    "ChannelName": "mychannel",
+    "DatastoreName": "mydatastore",
+    "PipelineName": "mypipeline",
+    "DatasetName": "mydataset",
+    "SqlQuery": "select * from myDatastore",
+    "ScheduleExpression": "cron(0 10 * * ? *)",
+    "IotArule": "amplifyiotdsbanalyticstopicrule",
+    "env": "dev"
+}

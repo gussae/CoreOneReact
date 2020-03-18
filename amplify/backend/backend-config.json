@@ -1,0 +1,68 @@
+{
+	"auth": {
+		"iotjumpstartappsync": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	},
+	"api": {
+		"iotjumpstartappsync": {
+			"service": "AppSync",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"authConfig": {
+					"additionalAuthenticationProviders": [
+						{
+							"authenticationType": "AWS_IAM"
+						}
+					],
+					"defaultAuthentication": {
+						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
+						"userPoolConfig": {
+							"userPoolId": "authiotjumpstartappsync"
+						}
+					}
+				}
+			}
+		}
+	},
+	"function": {
+		"createsensorvalue": {
+			"service": "Lambda",
+			"providerPlugin": "awscloudformation",
+			"build": true,
+			"dependsOn": [
+				{
+					"category": "api",
+					"resourceName": "iotjumpstartappsync",
+					"attributes": [
+						"GraphQLAPIIdOutput",
+						"GraphQLAPIEndpointOutput"
+					]
+				}
+			]
+		}
+	},
+	"iotrule": {
+        "createsensorvalue": {
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [
+                {
+                    "category": "function",
+                    "resourceName": "createsensorvalue",
+                    "attributes": [
+                        "Arn"
+                    ]
+                }
+            ]
+        }
+    },
+	"iotanalytics": {
+        "batch": {
+			"service": "IotAnalytics",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+        }
+	}
+}

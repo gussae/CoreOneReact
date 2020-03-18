@@ -1,0 +1,12 @@
+{
+    "state": {
+        "reported": {
+            "name": "",
+            "enabled": true,
+            "geo": {
+                "latitude": 0,
+                "longitude": 0
+            }
+        }
+    }
+}
