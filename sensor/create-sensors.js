@@ -69,6 +69,24 @@ async.series([
     },
     function(callback) {
 
+      //enable thing fleet indexing to enable searching things
+      var params = {
+        thingIndexingConfiguration: { 
+          thingIndexingMode: "REGISTRY_AND_SHADOW"
+        }
+      }
+
+      iot.updateIndexingConfiguration(params, function(err, data) {
+        
+        if (err) {callback(err);}
+        else {
+          callback();
+        }
+
+      });
+    },
+    function(callback) {
+
       //create the IOT policy
       var policyDocument = require(POLICY_FILE);
       results.policyName = 'Policy-' + results.uid;

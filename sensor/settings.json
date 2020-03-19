@@ -1,7 +1,7 @@
 {
   "host": "a7xm45onti3g0-ats.iot.us-west-2.amazonaws.com",
-  "keyPath": "./certs/sensor-1584484090765-private.pem.key",
-  "certPath": "./certs/sensor-1584484090765-certificate.pem.crt",
+  "keyPath": "./certs/sensor-1584583970711-private.pem.key",
+  "certPath": "./certs/sensor-1584583970711-certificate.pem.crt",
   "caPath": "./certs/AmazonRootCA1.pem",
-  "thingName": "sensor-1584484090765"
+  "thingName": "sensor-1584583970711"
 }

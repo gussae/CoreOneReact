@@ -42,27 +42,32 @@
 					]
 				}
 			]
+		},
+		"listsensors": {
+			"service": "Lambda",
+			"providerPlugin": "awscloudformation",
+			"build": true
 		}
 	},
 	"iotrule": {
-        "createsensorvalue": {
-            "providerPlugin": "awscloudformation",
-            "dependsOn": [
-                {
-                    "category": "function",
-                    "resourceName": "createsensorvalue",
-                    "attributes": [
-                        "Arn"
-                    ]
-                }
-            ]
-        }
-    },
+		"createsensorvalue": {
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "createsensorvalue",
+					"attributes": [
+						"Arn"
+					]
+				}
+			]
+		}
+	},
 	"iotanalytics": {
-        "batch": {
+		"batch": {
 			"service": "IotAnalytics",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": []
-        }
+		}
 	}
 }
