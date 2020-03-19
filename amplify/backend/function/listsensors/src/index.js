@@ -8,7 +8,9 @@ AWS.config.update({
 });
 
 exports.handler = async (event) => {
-    
+
+    var resultArray = [];
+
     //query all sensors that have reported a shadow and of type water quality sensor
     //you must have fleet indexing enabled in IoT Core with REGISTRY_AND_SHADOW indexed
     
@@ -20,9 +22,17 @@ exports.handler = async (event) => {
 
         var result = await iotClient.searchIndex(params).promise();
 
-        var shadow = JSON.parse(result.things[0].shadow);
+        //build an array of the thing shadow values and return array
+        result.things.forEach(element => {
+            
+            var shadow = JSON.parse(element.shadow);
 
-        return shadow.reported;
+            shadow.reported.sensorId = element.thingName;
+    
+            resultArray.push(shadow.reported);
+        });
+
+        return resultArray;
     }
     catch (err) {
 

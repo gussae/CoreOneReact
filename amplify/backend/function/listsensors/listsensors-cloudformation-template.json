@@ -63,7 +63,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-iotjumpstartappsync-dev-94356-deployment",
-					"S3Key": "amplify-builds/listsensors-77685a56326b66355946-build.zip"
+					"S3Key": "amplify-builds/listsensors-3443335a792b776c6c67-build.zip"
 				}
 			}
 		},

@@ -18,3 +18,21 @@ type Subscription {
   onCreateSensorValue(sensorId: String!): SensorValue @aws_subscribe(mutations: ["createSensorValue"])
   onCreateSensorValues: SensorValue @aws_subscribe(mutations: ["createSensorValue"])
 }
+
+type Geo
+{
+  latitude: Float!
+  longitude: Float!
+}
+
+type Sensor
+{
+  sensorId: String!
+  name: String!
+  enabled: Boolean!
+  geo: Geo!
+}
+
+type Query {
+  listSensors: [Sensor] @function(name: "iotjumpstart-list-sensors-${env}")
+}
