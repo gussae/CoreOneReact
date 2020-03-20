@@ -52,7 +52,7 @@ exports.handler = async (event) => {
       }`;
 
     //set the status based on the current value
-    let status = 1;
+    let status = Math.floor(Math.random() * 3) + 1;
     
     // if (event.data.value < 5 || event.data.value > 9) {
     //     status = 3;

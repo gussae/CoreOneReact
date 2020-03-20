@@ -37,14 +37,14 @@ export const GetSensorStatusColor = (status : number) => {
     
     let r = "";
 
-    if (status === 0) {
-        r = "white"
-    } else if (status === 1) {
+    if (status === 1) {
         r = "green"
     } else if (status === 2) {
         r = "yellow"
+    } else if (status === 3) {
+        r = "red"
     } else {
-      r = "red"
+      r = "white"
     }
 
     return r;
