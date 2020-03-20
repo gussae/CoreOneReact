@@ -43,7 +43,7 @@ If you run into issues installing or configuring anything in this project please
 **Clone this code repository**
 
 ```
-$ git clone https://github.com/aws-samples/aws-appsync-iot-core-realtime-dashboard.git
+$ git clone ssh://git.amazon.com/pkg/AWS-iotjumpstart-appsync-workshop
 ```
 
 **Switch to the app's folder and initialize your Amplify environment**
