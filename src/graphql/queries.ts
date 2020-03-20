@@ -11,6 +11,7 @@ export const listSensors = /* GraphQL */ `
         latitude
         longitude
       }
+      status
     }
   }
 `;
@@ -24,6 +25,7 @@ export const getSensor = /* GraphQL */ `
         latitude
         longitude
       }
+      status
     }
   }
 `;

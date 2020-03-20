@@ -33,6 +33,7 @@ type Sensor
   name: String!
   enabled: Boolean!
   geo: Geo!
+  status: Int
 }
 
 type Query {

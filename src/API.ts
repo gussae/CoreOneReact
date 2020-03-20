@@ -203,6 +203,7 @@ export type ListSensorsQuery = {
       latitude: number,
       longitude: number,
     },
+    status: number | null,
   } | null > | null,
 };
 
@@ -221,6 +222,7 @@ export type GetSensorQuery = {
       latitude: number,
       longitude: number,
     },
+    status: number | null,
   } | null,
 };
 
