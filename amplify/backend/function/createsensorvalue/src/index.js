@@ -23,33 +23,35 @@ const credentials = AWS.config.credentials;
 
 exports.handler = async (event) => {
 
-    console.log('event received:' + JSON.stringify(event));
-    
-    //create appsync client - using IAM permissions
-    const graphqlClient = new appsync.AWSAppSyncClient({
-        url: apiIotdashboardGraphQLAPIEndpointOutput,
-        region: region,
-        auth: {
-          type: 'AWS_IAM',
-          credentials: credentials
-        },
-        disableOffline: true
-    });
+  console.log('event received:' + JSON.stringify(event));
+  
+  //create appsync client - using IAM permissions
+  const graphqlClient = new appsync.AWSAppSyncClient({
+      url: apiIotdashboardGraphQLAPIEndpointOutput,
+      region: region,
+      auth: {
+        type: 'AWS_IAM',
+        credentials: credentials
+      },
+      disableOffline: true
+  });
 
-    //define the graphql mutation to create the sensor values
-    const mutation = gql`mutation CreateSensorValue(
-        $input: CreateSensorValueInput!
-        $condition: ModelSensorValueConditionInput
-      ) {
-        createSensorValue(input: $input, condition: $condition) {
-          id
-          sensorId
-          valueType
-          value
-          status
-          timestamp
-        }
-      }`;
+  //define the graphql mutation to create the sensor values
+  const mutation = gql`mutation CreateSensorValue(
+      $input: CreateSensorValueInput!
+      $condition: ModelSensorValueConditionInput
+    ) {
+      createSensorValue(input: $input, condition: $condition) {
+        id
+        sensorId
+        pH
+        temperature
+        salinity
+        disolvedO2
+        status
+        timestamp
+      }
+    }`;
 
     //set the status based on the current value
     let status = Math.floor(Math.random() * 3) + 1;
@@ -69,41 +71,10 @@ exports.handler = async (event) => {
         mutation,
         variables: {input: {
             sensorId: event.sensorId,
-            value: event.data.pH,
-            valueType: 'PH',
-            status: status,
-            timestamp: event.data.timestamp
-        }}
-      });
-
-      r = await graphqlClient.mutate({
-        mutation,
-        variables: {input: {
-            sensorId: event.sensorId,
-            value: event.data.temperature,
-            valueType: 'TEMPERATURE',
-            status: status,
-            timestamp: event.data.timestamp
-        }}
-      });
-
-      r = await graphqlClient.mutate({
-        mutation,
-        variables: {input: {
-            sensorId: event.sensorId,
-            value: event.data.salinity,
-            valueType: 'SALINITY',
-            status: status,
-            timestamp: event.data.timestamp
-        }}
-      });
-
-      r = await graphqlClient.mutate({
-        mutation,
-        variables: {input: {
-            sensorId: event.sensorId,
-            value: event.data.disolvedO2,
-            valueType: 'DISOLVED_O2',
+            pH: event.data.pH,
+            temperature: event.data.temperature,
+            salinity: event.data.salinity,
+            disolvedO2: event.data.disolvedO2,
             status: status,
             timestamp: event.data.timestamp
         }}

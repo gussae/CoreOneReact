@@ -9,8 +9,10 @@ export const createSensorValue = /* GraphQL */ `
     createSensorValue(input: $input, condition: $condition) {
       id
       sensorId
-      valueType
-      value
+      pH
+      temperature
+      salinity
+      disolvedO2
       status
       timestamp
     }
@@ -24,8 +26,10 @@ export const updateSensorValue = /* GraphQL */ `
     updateSensorValue(input: $input, condition: $condition) {
       id
       sensorId
-      valueType
-      value
+      pH
+      temperature
+      salinity
+      disolvedO2
       status
       timestamp
     }
@@ -39,8 +43,10 @@ export const deleteSensorValue = /* GraphQL */ `
     deleteSensorValue(input: $input, condition: $condition) {
       id
       sensorId
-      valueType
-      value
+      pH
+      temperature
+      salinity
+      disolvedO2
       status
       timestamp
     }

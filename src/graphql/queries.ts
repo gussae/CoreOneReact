@@ -20,8 +20,10 @@ export const getSensorValue = /* GraphQL */ `
     getSensorValue(id: $id) {
       id
       sensorId
-      valueType
-      value
+      pH
+      temperature
+      salinity
+      disolvedO2
       status
       timestamp
     }
@@ -37,8 +39,10 @@ export const listSensorValues = /* GraphQL */ `
       items {
         id
         sensorId
-        valueType
-        value
+        pH
+        temperature
+        salinity
+        disolvedO2
         status
         timestamp
       }
