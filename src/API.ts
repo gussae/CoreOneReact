@@ -203,8 +203,25 @@ export type ListSensorsQuery = {
       latitude: number,
       longitude: number,
     },
-    status: number,
   } | null > | null,
+};
+
+export type GetSensorQueryVariables = {
+  sensorId: string,
+};
+
+export type GetSensorQuery = {
+  getSensor:  {
+    __typename: "Sensor",
+    sensorId: string,
+    name: string,
+    enabled: boolean,
+    geo:  {
+      __typename: "Geo",
+      latitude: number,
+      longitude: number,
+    },
+  } | null,
 };
 
 export type GetSensorValueQueryVariables = {

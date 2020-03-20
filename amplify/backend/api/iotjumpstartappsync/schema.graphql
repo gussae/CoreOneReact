@@ -33,9 +33,9 @@ type Sensor
   name: String!
   enabled: Boolean!
   geo: Geo!
-  status: Int!
 }
 
 type Query {
   listSensors: [Sensor] @function(name: "iotjumpstart-list-sensors-${env}")
+  getSensor(sensorId: String!): Sensor @function(name: "iotjumpstart-get-sensor-${env}")
 }

@@ -11,7 +11,19 @@ export const listSensors = /* GraphQL */ `
         latitude
         longitude
       }
-      status
+    }
+  }
+`;
+export const getSensor = /* GraphQL */ `
+  query GetSensor($sensorId: String!) {
+    getSensor(sensorId: $sensorId) {
+      sensorId
+      name
+      enabled
+      geo {
+        latitude
+        longitude
+      }
     }
   }
 `;
