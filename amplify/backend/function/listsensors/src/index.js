@@ -28,7 +28,8 @@ exports.handler = async (event) => {
             var shadow = JSON.parse(element.shadow);
 
             shadow.reported.sensorId = element.thingName;
-    
+            shadow.reported.status = 0;
+            
             resultArray.push(shadow.reported);
         });
 

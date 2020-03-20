@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { onUpdateSensor } from '../../graphql/subscriptions';
+//import { onUpdateSensor } from '../../graphql/subscriptions';
 import NumericWidget, { WIDGET_MODE } from '../../components/NumericWidget/NumericWidget';
 import LineChartWidget from '../../components/LineChartWidget/LineChartWidget';
 
@@ -39,33 +39,33 @@ const SensorPage: React.FC = () => {
   const [value, setValue] = useState<number | null>(null);
 
   //subscribe to changes to the sensor's value
-  useEffect(() => {  
+  // useEffect(() => {  
 
-      console.log('start subscription to sensor');
+  //     console.log('start subscription to sensor');
 
-      const subscriber = API.graphql(graphqlOperation(onUpdateSensor, {id: id})).subscribe({
-        next: (response: ISensorSubscriptionResponse) => {
+  //     const subscriber = API.graphql(graphqlOperation(onUpdateSensor, {id: id})).subscribe({
+  //       next: (response: ISensorSubscriptionResponse) => {
   
-          //update the sensor's status in state
-          if (response.value.data.onUpdateSensor) {
-            setName(response.value.data.onUpdateSensor.name)
-            setValue(response.value.data.onUpdateSensor.value)
+  //         //update the sensor's status in state
+  //         if (response.value.data.onUpdateSensor) {
+  //           setName(response.value.data.onUpdateSensor.name)
+  //           setValue(response.value.data.onUpdateSensor.value)
 
-            console.log('sensor value received');
+  //           console.log('sensor value received');
 
-          }
-        },
-        error: (error: any) => {
-          console.log('error on sensor subscription', error);
-        }
-      });
+  //         }
+  //       },
+  //       error: (error: any) => {
+  //         console.log('error on sensor subscription', error);
+  //       }
+  //     });
 
-      return () => {
-        console.log('terminating subscription to sensor');
-        subscriber.unsubscribe();
-      }
+  //     return () => {
+  //       console.log('terminating subscription to sensor');
+  //       subscriber.unsubscribe();
+  //     }
       
-  }, [id]);
+  // }, [id]);
 
   return (
 

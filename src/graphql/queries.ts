@@ -1,6 +1,20 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
+export const listSensors = /* GraphQL */ `
+  query ListSensors {
+    listSensors {
+      sensorId
+      name
+      enabled
+      geo {
+        latitude
+        longitude
+      }
+      status
+    }
+  }
+`;
 export const getSensorValue = /* GraphQL */ `
   query GetSensorValue($id: ID!) {
     getSensorValue(id: $id) {

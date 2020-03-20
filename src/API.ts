@@ -178,6 +178,21 @@ export type DeleteSensorValueMutation = {
   } | null,
 };
 
+export type ListSensorsQuery = {
+  listSensors:  Array< {
+    __typename: "Sensor",
+    sensorId: string,
+    name: string,
+    enabled: boolean,
+    geo:  {
+      __typename: "Geo",
+      latitude: number,
+      longitude: number,
+    },
+    status: number,
+  } | null > | null,
+};
+
 export type GetSensorValueQueryVariables = {
   id: string,
 };

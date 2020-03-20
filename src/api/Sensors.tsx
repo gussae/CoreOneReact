@@ -1,25 +1,48 @@
 import { API, graphqlOperation } from 'aws-amplify';
-import { getSensor, listSensors } from '../graphql/queries';
-import { GetSensorQuery, ListSensorsQuery } from '../API';
+//import { getSensor, listSensors } from '../graphql/queries';
+//import { GetSensorQuery, ListSensorsQuery } from '../API';
+
+interface IGeo {
+    latitude: number,
+    longitude: number
+}
 
 export interface ISensor {
-    id: string,
+    sensorId: string,
     name: string,
-    latitude: number,
-    longitude: number,
-    status: number,
-    value: number,
-    timestamp: number
+    geo: IGeo,
+    enabled: boolean
+    status: number
 }
+
+interface ListSensorsResults {
+    listSensors: Array<ISensor>
+};
+
+const sensorsQuery = `
+    query ListSensors {
+        listSensors {
+            sensorId
+            name
+            enabled
+            geo {
+                latitude
+                longitude
+            }
+        }
+    }
+`;
 
 export const GetSensorStatusColor = (status : number) => {
     
     let r = "";
 
-    if (status === 1) {
-      r = "green"
+    if (status === 0) {
+        r = "white"
+    } else if (status === 1) {
+        r = "green"
     } else if (status === 2) {
-      r = "yellow"
+        r = "yellow"
     } else {
       r = "red"
     }
@@ -27,41 +50,41 @@ export const GetSensorStatusColor = (status : number) => {
     return r;
 }
 
-export const GetSensor = async (id: string): Promise<ISensor | null> => {
+// export const GetSensor = async (id: string): Promise<ISensor | null> => {
 
-    try {
+//     try {
 
-        const response = (await API.graphql(graphqlOperation(getSensor, {id: id}))) as {
-            data: GetSensorQuery;
-          };
+//         const response = (await API.graphql(graphqlOperation(getSensor, {id: id}))) as {
+//             data: GetSensorQuery;
+//           };
 
-        if (response.data.getSensor){
+//         if (response.data.getSensor){
             
-            const r = response.data.getSensor as ISensor;
+//             const r = response.data.getSensor as ISensor;
             
-            return r;
-        }
-        else {
+//             return r;
+//         }
+//         else {
 
-            return null;
-        }
+//             return null;
+//         }
 
-    } catch (error) {
-        throw error;
-    }
-}
+//     } catch (error) {
+//         throw error;
+//     }
+// }
 
 export const GetSensors = async (): Promise<Array<ISensor>> => {
 
     try {
 
-        const response = (await API.graphql(graphqlOperation(listSensors))) as {
-            data: ListSensorsQuery;
+        const response = (await API.graphql(graphqlOperation(sensorsQuery))) as {
+            data: ListSensorsResults;
           };
 
-        if (response.data.listSensors && response.data.listSensors.items) {
+        if (response.data && response.data.listSensors) {
             
-            const r = response.data.listSensors.items as Array<ISensor>;
+            const r = response.data.listSensors as Array<ISensor>;
             
             return r;
         }
