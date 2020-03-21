@@ -82,10 +82,11 @@ You will then see a series of output messages as Amplify builds and deploys the 
 Resources being created in your account include:
 
 - AppSync GraphQL API
-- DynamoDB table
-- Cognito user pool
-- Lambda functions (2)
+- DynamoDB Table
+- Cognito User Pool
+- Lambda Functions (3)
 - IoT Rules (2)
+- IoT Analytic
 
 **Install the web app's Node js packages**
 
