@@ -96,13 +96,15 @@ const MapPage: React.FC = () => {
           //update the sensor's status in state
           if (response.value.data.onCreateSensorValues) {
             
-            console.log(response.value.data.onCreateSensorValues);
-            const newSensors = sensors.map(s =>
-              s.sensorId === response.value.data.onCreateSensorValues.sensorId
-                ? { ...s, status: response.value.data.onCreateSensorValues.status }
-                : s
-            );
+            var newSensors = [...sensors];
         
+            for (let item of newSensors) {
+              if (item.sensorId === response.value.data.onCreateSensorValues.sensorId){
+                item.status = response.value.data.onCreateSensorValues.status;
+                break;
+              }
+            }
+
             console.log('sensors updated');
 
             setSensors(newSensors);
