@@ -1,9 +1,7 @@
 process.env.AWS_SDK_LOAD_CONFIG = true;
 
 const AWS = require('aws-sdk');
-const fs = require('fs');
-const async = require('async');
-const https = require('https');
+const fs = require('fs').promises;
 
 //if a region is not specified in your local AWS config, it will default to us-east-1
 const REGION = AWS.config.region || 'us-east-1';
@@ -18,8 +16,6 @@ const SETTINGS_FILE = './settings.json';
 const SENSOR_FILE = './sensor.json';
 const CERT_FOLDER = './certs/';
 const POLICY_FILE = './policy.json';
-const ROOT_CA_FILE = 'AmazonRootCA1.pem';
-const ROOT_CA_URL = "https://www.amazontrust.com/repository/AmazonRootCA1.pem";
 
 //open sensor app settings file
 var settings = require(SETTINGS_FILE);
@@ -45,213 +41,99 @@ var results = {
   privateKey: ""
 }
 
-var iot = new AWS.Iot();
+async function createSensors(){
 
-//create a unique thing name
-settings.thingName = "sensor-" + results.uid;
+  try {
 
-async.series([
-    function(callback) {
+    var iot = new AWS.Iot();
 
-        // get the regional IOT endpoint
-        var params = { endpointType: 'iot:Data-ATS'};
-    
-        iot.describeEndpoint(params, function(err, data) {
-          
-          if (err) {callback(err);}
-          else {
+    //create a unique thing name
+    settings.thingName = "sensor-" + results.uid;
   
-            settings.host = data.endpointAddress;
-            callback();
-          }
-
-        });
-    },
-    function(callback) {
-
-      //enable thing fleet indexing to enable searching things
-      var params = {
-        thingIndexingConfiguration: { 
-          thingIndexingMode: "REGISTRY_AND_SHADOW"
-        }
-      }
-
-      iot.updateIndexingConfiguration(params, function(err, data) {
-        
-        if (err) {callback(err);}
-        else {
-          callback();
-        }
-
-      });
-    },
-    function(callback) {
-
-      //create the IOT policy
-      var policyDocument = require(POLICY_FILE);
-      results.policyName = 'Policy-' + results.uid;
-
-      var policy = { policyName: results.policyName, policyDocument: JSON.stringify(policyDocument)};
-    
-      iot.createPolicy(policy, function(err, data) {
-        
-        if (err) {callback(err);}
-        else {
-          results.policyArn = data.policyArn;
-          callback();
-        }
-
-      });
-    },
-    function(callback) {
-
-      //create the certificates
-      iot.createKeysAndCertificate({setAsActive:true}, function(err, data) {
-        
-        if (err) {callback(err);}
-        else {
-
-          results.certificateArn = data.certificateArn;
-          results.certificatePem = data.certificatePem;
-          results.privateKey = data.keyPair.PrivateKey;
+    // get the regional IOT endpoint
+    var params = { endpointType: 'iot:Data-ATS'};
+    var result = await iot.describeEndpoint(params).promise();
+    settings.host = result.endpointAddress;
   
-          callback();
-        }
-
-      });
-    },
-    function(callback) {
-        
-      //save the certificate
-        var fileName = CERT_FOLDER + settings.thingName + '-certificate.pem.crt';
-        
-        settings.certPath = fileName;
-
-        fs.writeFile(fileName, results.certificatePem, (err) => {
-          
-          if (err) {callback(err);}
-          else {
-            callback();
-          }
-
-        });
-    },
-    function(callback) {
-
-        //save the private key
-        var fileName = CERT_FOLDER + settings.thingName + '-private.pem.key';
-
-        settings.keyPath = fileName;
-
-        fs.writeFile(fileName, results.privateKey, (err) => {
-          
-          if (err) {callback(err);}
-          else {
-            callback();
-          }
-
-        });
-
-    },
-    function(callback) {
-      
-      //save the AWS root certificate
-      settings.caPath = CERT_FOLDER + ROOT_CA_FILE;
-
-      var file = fs.createWriteStream(settings.caPath);
-      var request = https.get(ROOT_CA_URL, function(response) {
-        response.pipe(file);
-        file.on('finish', function() {
-          file.close();
-          callback();
-        });
-      });
-    },
-    function(callback) {
-
-      //create the thing type
-      var params = {
-        thingTypeName: sensor.thingTypeName
+    //enable thing fleet indexing to enable searching things
+    params = {
+      thingIndexingConfiguration: { 
+      thingIndexingMode: "REGISTRY_AND_SHADOW"
       }
+    }
 
-      iot.createThingType(params, function(err, data) {
-        
-        if (err) {callback(err);}
-        else {
-          callback();
-        }
-      });
-    },
-    function(callback) {
+    result = await iot.updateIndexingConfiguration(params).promise();
 
-      //create the thing
+    //create the IOT policy
+    var policyDocument = require(POLICY_FILE);
+    results.policyName = 'Policy-' + results.uid;
 
-      var params = {
-        thingName: settings.thingName,
-        attributePayload: {
-          attributes: {
-            'Manufacturer': sensor.manufacturer,
-            'Model': sensor.model,
-            'Firmware': sensor.firmware
-          },
-          merge: false
+    var policy = { policyName: results.policyName, policyDocument: JSON.stringify(policyDocument)};
+    
+    result = await  iot.createPolicy(policy).promise()
+    results.policyArn = result.policyArn;
+    
+    //create the certificates
+    result = await iot.createKeysAndCertificate({setAsActive:true}).promise();
+    results.certificateArn = result.certificateArn;
+    results.certificatePem = result.certificatePem;
+    results.privateKey = result.keyPair.PrivateKey;
+
+    //save the certificate
+    var fileName = CERT_FOLDER + settings.thingName + '-certificate.pem.crt';
+    settings.certPath = fileName;
+    await fs.writeFile(fileName, results.certificatePem);
+
+    //save the private key
+    fileName = CERT_FOLDER + settings.thingName + '-private.pem.key';
+    settings.keyPath = fileName;
+    await fs.writeFile(fileName, results.privateKey);
+
+    //create the thing type
+    params = {
+      thingTypeName: sensor.thingTypeName
+    }
+    await iot.createThingType(params).promise();
+
+    //create the thing
+    params = {
+      thingName: settings.thingName,
+      attributePayload: {
+        attributes: {
+          'Manufacturer': sensor.manufacturer,
+          'Model': sensor.model,
+          'Firmware': sensor.firmware
         },
-        thingTypeName: sensor.thingTypeName
-      };
+        merge: false
+      },
+      thingTypeName: sensor.thingTypeName
+    };
 
-      iot.createThing(params, function(err, data) {
+    await iot.createThing(params).promise();
+
+    //attach policy to certificate
+    await iot.attachPolicy({ policyName: results.policyName, target: results.certificateArn}).promise();
         
-        if (err) {callback(err);}
-        else {
-          callback();
-        }
+    //attach thing to certificate
+    await iot.attachThingPrincipal({thingName: settings.thingName, principal: results.certificateArn}).promise();
 
-      });
-    },
-    function(callback) {
+    //save the updated settings file
+    let data = JSON.stringify(settings, null, 2);
+    await fs.writeFile(SETTINGS_FILE, data);
 
-      //attach policy to certificate
-      iot.attachPolicy({ policyName: results.policyName, target: results.certificateArn}, function(err, data) {
-        
-        if (err) {callback(err);}
-        else {
-          callback();
-        }
-        
-      });
-    },
-    function(callback) {
+    //display results
+    console.log('IOT device provisioned');
+    console.log('Thing Name: ' + settings.thingName);
+    console.log('AWS Region: ' + REGION);
+    console.log('AWS Profile: ' + PROFILE);
 
-      //attach thing to certificate
-      iot.attachThingPrincipal({thingName: settings.thingName, principal: results.certificateArn}, function(err, data) {
-        
-        if (err) {callback(err);}
-        else {
-          callback();
-        }
-        
-      });
-    },
-    function(callback) {
+  }
+  catch (err) {
 
-        //save the updated settings file
-        let data = JSON.stringify(settings, null, 2);
+    console.log('Error creating sensors');
+    console.log(err.message);
+  }
 
-        fs.writeFile(SETTINGS_FILE, data, (err) => {
-          if (err) { callback(err) }
-          else {
-            callback();
-          }
-        });
-    }
-  ],
-  function(err, results) {
-    if (err){
-      console.error ("ERROR: " + err.message);
-    } else {
-      console.log('IOT device provisioned');
-      console.log('Thing Name: ' + settings.thingName);
-      console.log('AWS Region: ' + REGION);
-      console.log('AWS Profile: ' + PROFILE);
-    }
-});
+}
+
+createSensors();
