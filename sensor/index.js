@@ -16,7 +16,6 @@ const VALUE_RATE = 2000; //rate in milliseconds new values will be published to 
 
 //initialize the IOT device
 var device = awsIot.device(settings);
-//var shadow = awsIot.thingShadow(settings);
 
 //create a placeholder for the message
 var msg = {
@@ -26,13 +25,6 @@ var msg = {
     disolvedO2: 0,
     timestamp: new Date().getTime()
 }
-
-// shadow.on('status', 
-//     function(thingName, stat, clientToken, stateObject) {
-//        console.log('received '+stat+' on '+thingName+': '+
-//                    JSON.stringify(stateObject));
-
-// });
 
 device.on('connect', function() {
     
