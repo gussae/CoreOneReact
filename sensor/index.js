@@ -55,17 +55,10 @@ async function run(sensor) {
         setInterval(function(){
 
             //calculate randome values for each sensor reading
-            msg.pH = 20 + Math.floor((Math.random() * (80 - 1) + 1));
-            msg.pH = (msg.pH / 10);
-
-            msg.temperature = 30 + Math.floor((Math.random() * (80 - 1) + 1));
-            msg.temperature = (msg.temperature / 10);
-
-            msg.salinity = 40 + Math.floor((Math.random() * (80 - 1) + 1));
-            msg.salinity = (msg.salinity / 10);
-
-            msg.disolvedO2 = 50 + Math.floor((Math.random() * (80 - 1) + 1));
-            msg.disolvedO2 = (msg.disolvedO2 / 10);
+            msg.pH = RandomValue(50, 100) / 10;
+            msg.temperature = RandomValue(480, 570) / 10;
+            msg.salinity = RandomValue(200, 350) / 10;
+            msg.disolvedO2 = RandomValue(40, 120) / 10;
 
             msg.timestamp = new Date().getTime();
 
@@ -82,6 +75,10 @@ async function run(sensor) {
     device.on('error', function(error) {
         console.log('Error: ', error);
     });
+}
+
+function RandomValue (min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 
 //run simulation for each sensor
