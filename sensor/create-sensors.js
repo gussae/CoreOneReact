@@ -12,16 +12,13 @@ const REGION = AWS.config.region || 'us-east-1';
 const PROFILE = process.env.AWS_PROFILE || 'default';
 
 //constants used in the app - do not change
-const SETTINGS_FILE = './settings.json';
-const SENSOR_FILE = './sensor.json';
+const SENSORS_FILE = './sensors.json';
 const CERT_FOLDER = './certs/';
 const POLICY_FILE = './policy.json';
 
-//open sensor app settings file
-var settings = require(SETTINGS_FILE);
-
 //open sensor definition file
-var sensor = require(SENSOR_FILE);
+var sensors = require(SENSORS_FILE);
+const policyDocument = require(POLICY_FILE);
 
 //use the credentials from the AWS profile
 var credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
@@ -31,29 +28,16 @@ AWS.config.update({
     region: REGION
 });
 
-//store consolidated results from various functions
-var results = {
-  uid: new Date().getTime(),
-  policyArn: "",
-  policyName: "",
-  certificateArn: "",
-  certificatePem: "",
-  privateKey: ""
-}
-
 async function createSensors(){
 
   try {
 
     var iot = new AWS.Iot();
-
-    //create a unique thing name
-    settings.thingName = "sensor-" + results.uid;
   
     // get the regional IOT endpoint
     var params = { endpointType: 'iot:Data-ATS'};
     var result = await iot.describeEndpoint(params).promise();
-    settings.host = result.endpointAddress;
+    const host = result.endpointAddress;
   
     //enable thing fleet indexing to enable searching things
     params = {
@@ -64,68 +48,77 @@ async function createSensors(){
 
     result = await iot.updateIndexingConfiguration(params).promise();
 
-    //create the IOT policy
-    var policyDocument = require(POLICY_FILE);
-    results.policyName = 'Policy-' + results.uid;
+    //iterate over all sensors and create policies, certs, ans things
+    sensors.forEach(async (sensor) => {
 
-    var policy = { policyName: results.policyName, policyDocument: JSON.stringify(policyDocument)};
+        //create a unique thing name
+        sensor.settings.clientId = "sensor-" + new Date().getTime();
+        sensor.settings.host = host;
     
-    result = await  iot.createPolicy(policy).promise()
-    results.policyArn = result.policyArn;
-    
-    //create the certificates
-    result = await iot.createKeysAndCertificate({setAsActive:true}).promise();
-    results.certificateArn = result.certificateArn;
-    results.certificatePem = result.certificatePem;
-    results.privateKey = result.keyPair.PrivateKey;
+        //create the IOT policy
+        var policyName = 'Policy-' + sensor.settings.clientId;
+        var policy = { policyName: policyName, policyDocument: JSON.stringify(policyDocument)};
+        result = await  iot.createPolicy(policy).promise()
+        const policyArn = result.policyArn;
 
-    //save the certificate
-    var fileName = CERT_FOLDER + settings.thingName + '-certificate.pem.crt';
-    settings.certPath = fileName;
-    await fs.writeFile(fileName, results.certificatePem);
+        //create the certificates
+        result = await iot.createKeysAndCertificate({setAsActive:true}).promise();
+        const certificateArn = result.certificateArn;
+        const certificatePem = result.certificatePem;
+        const privateKey = result.keyPair.PrivateKey;
 
-    //save the private key
-    fileName = CERT_FOLDER + settings.thingName + '-private.pem.key';
-    settings.keyPath = fileName;
-    await fs.writeFile(fileName, results.privateKey);
+        //save the certificate
+        var fileName = CERT_FOLDER + sensor.settings.clientId + '-certificate.pem.crt';
+        sensor.settings.certPath = fileName;
+        await fs.writeFile(fileName, certificatePem);
 
-    //create the thing type
-    params = {
-      thingTypeName: sensor.thingTypeName
-    }
-    await iot.createThingType(params).promise();
+        //save the private key
+        fileName = CERT_FOLDER + sensor.settings.clientId + '-private.pem.key';
+        sensor.settings.keyPath = fileName;
+        await fs.writeFile(fileName, privateKey);
 
-    //create the thing
-    params = {
-      thingName: settings.thingName,
-      attributePayload: {
-        attributes: {
-          'Manufacturer': sensor.manufacturer,
-          'Model': sensor.model,
-          'Firmware': sensor.firmware
-        },
-        merge: false
-      },
-      thingTypeName: sensor.thingTypeName
-    };
+        //create the thing type
+        params = {
+          thingTypeName: sensor.thingTypeName
+        }
+        await iot.createThingType(params).promise();
 
-    await iot.createThing(params).promise();
+        //create the thing
+        params = {
+          thingName: sensor.settings.clientId,
+          attributePayload: {
+            attributes: {
+              'Manufacturer': sensor.manufacturer,
+              'Model': sensor.model,
+              'Firmware': sensor.firmware
+            },
+            merge: false
+          },
+          thingTypeName: sensor.thingTypeName
+        };
 
-    //attach policy to certificate
-    await iot.attachPolicy({ policyName: results.policyName, target: results.certificateArn}).promise();
-        
-    //attach thing to certificate
-    await iot.attachThingPrincipal({thingName: settings.thingName, principal: results.certificateArn}).promise();
+        await iot.createThing(params).promise();
+
+        //attach policy to certificate
+        await iot.attachPolicy({ policyName: policyName, target: certificateArn}).promise();
+            
+        //attach thing to certificate
+        await iot.attachThingPrincipal({thingName: sensor.settings.clientId, principal: certificateArn}).promise();
+
+    })
 
     //save the updated settings file
-    let data = JSON.stringify(settings, null, 2);
-    await fs.writeFile(SETTINGS_FILE, data);
+    let data = JSON.stringify(sensors, null, 2);
+    await fs.writeFile(SENSORS_FILE, data);
 
     //display results
-    console.log('IOT device provisioned');
-    console.log('Thing Name: ' + settings.thingName);
+    console.log('IOT devices provisioned');
     console.log('AWS Region: ' + REGION);
     console.log('AWS Profile: ' + PROFILE);
+
+    sensors.forEach((sensor) => {
+      console.log('Thing Name: ' + sensor.settings.clientId);
+    })
 
   }
   catch (err) {

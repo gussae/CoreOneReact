@@ -1,10 +1,7 @@
 const awsIot = require('aws-iot-device-sdk');
 
 //load the settings file that contains the location of the device certificates and the clientId of the sensor
-var settings = require('./settings.json');
-
-//load the settings file that contains the location of the device certificates and the clientId of the sensor
-var sensor = require('./sensor.json');
+var sensors = require('./sensors.json');
 
 //load the sensor records
 var shadowDocument = require('./shadowDocument.json');
@@ -14,66 +11,70 @@ const SHADOW_TOPIC = "$aws/things/[thingName]/shadow/update";
 const VALUE_TOPIC = "dt/bay-health/SF/[thingName]/sensor-value"; //topic to which sensor values will be published
 const VALUE_RATE = 2000; //rate in milliseconds new values will be published to the Cloud
 
-//initialize the IOT device
-var device = awsIot.device(settings);
+async function run(sensor) {
 
-//create a placeholder for the message
-var msg = {
-    pH: 0,
-    temperature: 0,
-    salinity: 0,
-    disolvedO2: 0,
-    timestamp: new Date().getTime()
-}
+    //initialize the IOT device
+    var device = awsIot.device(sensor.settings);
 
-device.on('connect', function() {
+    //create a placeholder for the message
+    var msg = {
+        pH: 0,
+        temperature: 0,
+        salinity: 0,
+        disolvedO2: 0,
+        timestamp: new Date().getTime()
+    }
+
+    device.on('connect', function() {
     
-    console.log('connected to IoT Hub');
+        console.log('connected to IoT Hub');
+    
+        //publish the shadow document for the sensor
+        var topic = SHADOW_TOPIC.replace('[thingName]', sensor.settings.clientId);
+    
+        shadowDocument.state.reported.name = sensor.name;
+        shadowDocument.state.reported.enabled = true;
+        shadowDocument.state.reported.geo.latitude = sensor.geo.latitude;
+        shadowDocument.state.reported.geo.longitude = sensor.geo.longitude;
+    
+        device.publish(topic, JSON.stringify(shadowDocument)); 
+    
+        console.log('published to shadow topic ' + topic + ' ' + JSON.stringify(shadowDocument));
+    
+        //publish new value readings very 2 seconds
+        setInterval(function(){
 
-    //publish the shadow document for the sensor
-    var topic = SHADOW_TOPIC.replace('[thingName]', settings.thingName);
+            //calculate randome values for each sensor reading
+            msg.pH = 20 + Math.floor((Math.random() * (80 - 1) + 1));
+            msg.pH = (msg.pH / 10);
 
-    shadowDocument.state.reported.name = sensor.name;
-    shadowDocument.state.reported.enabled = true;
-    shadowDocument.state.reported.geo.latitude = sensor.geo.latitude;
-    shadowDocument.state.reported.geo.longitude = sensor.geo.longitude;
+            msg.temperature = 30 + Math.floor((Math.random() * (80 - 1) + 1));
+            msg.temperature = (msg.temperature / 10);
 
-    device.publish(topic, JSON.stringify(shadowDocument)); 
+            msg.salinity = 40 + Math.floor((Math.random() * (80 - 1) + 1));
+            msg.salinity = (msg.salinity / 10);
 
-    console.log('published to shadow topic ' + topic + ' ' + JSON.stringify(shadowDocument));
+            msg.disolvedO2 = 50 + Math.floor((Math.random() * (80 - 1) + 1));
+            msg.disolvedO2 = (msg.disolvedO2 / 10);
 
-    //publish new value readings very 2 seconds
-    setInterval(sendSensorState, VALUE_RATE);
-});
+            msg.timestamp = new Date().getTime();
 
-device.on('error', function(error) {
-    console.log('Error: ', error);
-});
+            //publish the sensor reading message
+            var topic = VALUE_TOPIC.replace('[thingName]', sensor.settings.clientId);
 
-function sendSensorState() {
+            device.publish(topic, JSON.stringify(msg)); 
 
-    //calculate randome values for each sensor reading
-    msg.pH = 20 + Math.floor((Math.random() * (80 - 1) + 1));
-    msg.pH = (msg.pH / 10);
+            console.log('published to telemetry topic ' + topic + ' ' + JSON.stringify(msg));
 
-    msg.temperature = 30 + Math.floor((Math.random() * (80 - 1) + 1));
-    msg.temperature = (msg.temperature / 10);
+        }, VALUE_RATE);
+    });
 
-    msg.salinity = 40 + Math.floor((Math.random() * (80 - 1) + 1));
-    msg.salinity = (msg.salinity / 10);
-
-    msg.disolvedO2 = 50 + Math.floor((Math.random() * (80 - 1) + 1));
-    msg.disolvedO2 = (msg.disolvedO2 / 10);
-
-    msg.timestamp = new Date().getTime();
-
-    //publish the sensor reading message
-    var topic = VALUE_TOPIC.replace('[thingName]', settings.thingName);
-
-    device.publish(topic, JSON.stringify(msg)); 
-
-    console.log('published to telemetry topic ' + topic + ' ' + JSON.stringify(msg));
+    device.on('error', function(error) {
+        console.log('Error: ', error);
+    });
 }
-  
-  
 
+//run simulation for each sensor
+sensors.forEach((sensor) => {
+    run(sensor);
+})
