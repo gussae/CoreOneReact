@@ -14,13 +14,13 @@ Click on a sensor to view the detailed values received in realtime from that spe
 
 ![Image description](images/architecture.jpg)
 
-1. The sensor component is developed with the AWS IoT Device SDK for Javascript.  The sensor is registered as a Thing in IoT Core and publishes random pH values for six sensors in a JSON payload to the Cloud every 2 seconds.
+1. The sensor component is developed with the AWS IoT Device SDK for Javascript.  The sensors are registered as _Things_ in IoT Core and publish random values to the Cloud on a configurable frequency.  Metadata about each sensor, such as its geolocation, is stored in a _Thing Shadow_.
 
-2. A rule in IoT Core subscribes to the message topic and forwards the JSON payload to a Lambda function.
+2. A rule in IoT Core subscribes to the message topic and forwards the JSON payload to a Lambda function and an IoT Analytic.
 
 3. The Node js Lambda function executes a GraphQL mutatation in AppSync.  The mutation saves the latest value for the sensor in DynamoDB and broadcasts the latest value in real-time to the web dashboard. The Lambda function uses an IAM role and policy to obtain permissions to interact with AppSync.
 
-4. The React web dashboard application is written in Typescript and subscribes to the AppSync sensor update subscriptions.  When new  values are received, the map on the screen is updated in real-time to reflect the new sensor values. The application uses Cognito to authenticate users and allow them to perform the AppSync subscription. 
+4. The React web dashboard application is written in Typescript and subscribes to the AppSync sensor subscriptions.  When new  values are received, the map on the screen is updated in real-time to reflect the new sensor values. The application uses Cognito to authenticate users and allow them to perform the AppSync subscription. 
 
 ## Getting Started
 
@@ -114,10 +114,10 @@ Install the Node js packages, and run the Node js app to create your sensor as a
 ```
 $ cd sensor
 $ npm install
-$ node create-sensor.js
+$ node create-sensors.js
 ```
 
-*Note - this will create the sensor using your default AWS profile account and region.  If you have not specified a default region in your local AWS configuration, it will default to us-east-1.
+*Note - this will create the sensors using your default AWS profile account and region.  If you have not specified a default region in your local AWS configuration, it will default to us-east-1.
 
 If you do not have a **default** profile or you are using a profile other than **default**, run the app with an AWS_PROFILE environment variable specifiying the profile name you would like to use.
 
@@ -136,15 +136,20 @@ From the sensor terminal window:
 ```
 $ node index.js
 ```
-You will see output from the app as it connects to IoT Core and publishes new messages for six sensors every two seconds.
+You will see output from the app as it connects to IoT Core and publishes new messages for the sensors. Each sensor will first transmit its shadow document and then sensor readings every few seconds according the to the sensor's transmission frequency setting.
 
 ```
-published to topic cmd/sensors/sensor-1/sensor-create {"status":1,"value":0,"timestamp":1570562143384}
+connected to IoT Hub
 
-published to topic dt/sensors/sensor-1/sensor-value {"status":2,"value":80,"timestamp":1570562145788}
+published to shadow topic $aws/things/sensor-1584818425862/shadow/update {"state":{"reported":{"name":"SF Bay - Southwest","enabled":true,"geo":{"latitude":37.602464,"longitude":-122.338036}}}}
 
-published to topic dt/sensors/sensor-1/sensor-value {"status":3,"value":84,"timestamp":1570562147790}
+published to telemetry topic dt/bay-health/SF/sensor-1584818425862/sensor-value {"pH":3.9,"temperature":6.6,"salinity":9.7,"disolvedO2":7.9,"timestamp":1584818232693}
+
+published to telemetry topic dt/bay-health/SF/sensor-1584818425862/sensor-value {"pH":7.9,"temperature":3.5,"salinity":9.2,"disolvedO2":5.5,"timestamp":1584818234707}
+
+published to telemetry topic dt/bay-health/SF/sensor-1584818425862/sensor-value {"pH":3.4,"temperature":10.6,"salinity":7.6,"disolvedO2":7.7,"timestamp":1584818234782}
 ```
+
 Keep this app running and switch to the terminal window for the **root** folder for the app.
 
 **Start the web app**
