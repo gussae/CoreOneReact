@@ -5,9 +5,10 @@
     "manufacturer": "Xylem",
     "model": "WQ201",
     "firmware": "1.30",
+    "frequency": 3000,
     "geo": {
-        "latitude": 37.692625,
-        "longitude": -122.200682
+      "latitude": 37.692625,
+      "longitude": -122.200682
     },
     "settings": {
       "host": "",
@@ -23,9 +24,10 @@
     "manufacturer": "Xylem",
     "model": "WQ201",
     "firmware": "1.30",
+    "frequency": 3200,
     "geo": {
-        "latitude": 37.612215,
-        "longitude": -122.162933
+      "latitude": 37.612215,
+      "longitude": -122.162933
     },
     "settings": {
       "host": "",
@@ -41,9 +43,10 @@
     "manufacturer": "Xylem",
     "model": "WQ201",
     "firmware": "1.30",
+    "frequency": 3400,
     "geo": {
-        "latitude": 37.602464,
-        "longitude": -122.338036
+      "latitude": 37.602464,
+      "longitude": -122.338036
     },
     "settings": {
       "host": "",
@@ -59,9 +62,10 @@
     "manufacturer": "Xylem",
     "model": "WQ201",
     "firmware": "1.30",
+    "frequency": 3600,
     "geo": {
-        "latitude": 37.66228,
-        "longitude": -122.36549
+      "latitude": 37.66228,
+      "longitude": -122.36549
     },
     "settings": {
       "host": "",
@@ -77,9 +81,10 @@
     "manufacturer": "Xylem",
     "model": "WQ201",
     "firmware": "1.30",
+    "frequency": 3800,
     "geo": {
-        "latitude": 37.751372,
-        "longitude": -122.359999
+      "latitude": 37.751372,
+      "longitude": -122.359999
     },
     "settings": {
       "host": "",
@@ -95,9 +100,10 @@
     "manufacturer": "Xylem",
     "model": "WQ201",
     "firmware": "1.30",
+    "frequency": 4000,
     "geo": {
-        "latitude": 37.800307,
-        "longitude": -122.354788
+      "latitude": 37.800307,
+      "longitude": -122.354788
     },
     "settings": {
       "host": "",

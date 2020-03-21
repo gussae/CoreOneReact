@@ -1,15 +1,25 @@
 const awsIot = require('aws-iot-device-sdk');
 
-//load the settings file that contains the location of the device certificates and the clientId of the sensor
+//load the sensors file that contains the location of the device certificates and the clientId of the sensor
 var sensors = require('./sensors.json');
-
-//load the sensor records
-var shadowDocument = require('./shadowDocument.json');
 
 //constants used in the application
 const SHADOW_TOPIC = "$aws/things/[thingName]/shadow/update";
 const VALUE_TOPIC = "dt/bay-health/SF/[thingName]/sensor-value"; //topic to which sensor values will be published
-const VALUE_RATE = 5000; //rate in milliseconds new values will be published to the Cloud
+
+//shadow document to be transmitted at statup
+var shadowDocument = {
+    state: {
+        reported: {
+            name: "",
+            enabled: true,
+            geo: {
+                latitude: 0,
+                longitude: 0
+            }
+        }
+    }
+}
 
 async function run(sensor) {
 
@@ -66,7 +76,7 @@ async function run(sensor) {
 
             console.log('published to telemetry topic ' + topic + ' ' + JSON.stringify(msg));
 
-        }, VALUE_RATE);
+        }, sensor.frequency);
     });
 
     device.on('error', function(error) {
