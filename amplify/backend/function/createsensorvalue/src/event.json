@@ -1,5 +1,10 @@
 {
-    "key1": "value1",
-    "key2": "value2",
-    "key3": "value3"
+    "data": {
+        "timestamp": 1584827982105,
+        "disolvedO2": 5.9,
+        "salinity": 30.1,
+        "temperature": 48.7,
+        "pH": 10
+    },
+    "sensorId": "sensor-test"
 }
