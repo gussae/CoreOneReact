@@ -60,7 +60,6 @@ async function createSensors(){
         var policyName = 'Policy-' + sensor.settings.clientId;
         var policy = { policyName: policyName, policyDocument: JSON.stringify(policyDocument)};
         result = await iot.createPolicy(policy).promise()
-        //const policyArn = result.policyArn;
 
         //create the certificates
         result = await iot.createKeysAndCertificate({setAsActive:true}).promise();
@@ -111,7 +110,6 @@ async function createSensors(){
 
         //save the updated settings file
         let data = JSON.stringify(sensors, null, 2);
-        console.log(data);
         await fs.writeFile(SENSORS_FILE, data);
     })
 

@@ -95,6 +95,7 @@ const MapPage: React.FC = () => {
 
           //update the sensor's status in state
           if (response.value.data.onCreateSensorValues) {
+            
             console.log(response.value.data.onCreateSensorValues);
             const newSensors = sensors.map(s =>
               s.sensorId === response.value.data.onCreateSensorValues.sensorId

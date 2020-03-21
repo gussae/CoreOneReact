@@ -92,6 +92,8 @@ const SensorPage: React.FC = () => {
             setSalinity(response.value.data.onCreateSensorValue.salinity);
             setDisolvedO2(response.value.data.onCreateSensorValue.disolvedO2);
 
+            console.log(response.value.data.onCreateSensorValue);
+
             console.log('sensor value received');
 
           }

@@ -9,7 +9,7 @@ var shadowDocument = require('./shadowDocument.json');
 //constants used in the application
 const SHADOW_TOPIC = "$aws/things/[thingName]/shadow/update";
 const VALUE_TOPIC = "dt/bay-health/SF/[thingName]/sensor-value"; //topic to which sensor values will be published
-const VALUE_RATE = 2000; //rate in milliseconds new values will be published to the Cloud
+const VALUE_RATE = 5000; //rate in milliseconds new values will be published to the Cloud
 
 async function run(sensor) {
 
@@ -41,7 +41,7 @@ async function run(sensor) {
     
         console.log('published to shadow topic ' + topic + ' ' + JSON.stringify(shadowDocument));
     
-        //publish new value readings very 2 seconds
+        //publish new value readings based on value_rate
         setInterval(function(){
 
             //calculate randome values for each sensor reading
