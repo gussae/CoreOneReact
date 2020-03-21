@@ -15,6 +15,7 @@ const PROFILE = process.env.AWS_PROFILE || 'default';
 const SENSORS_FILE = './sensors.json';
 const CERT_FOLDER = './certs/';
 const POLICY_FILE = './policy.json';
+const ROOT_CA_FILE = 'AmazonRootCA1.pem';
 
 //open sensor definition file
 var sensors = require(SENSORS_FILE);
@@ -48,7 +49,7 @@ async function createSensors(){
 
     result = await iot.updateIndexingConfiguration(params).promise();
 
-    //iterate over all sensors and create policies, certs, ans things
+    //iterate over all sensors and create policies, certs, and things
     sensors.forEach(async (sensor) => {
 
         //create a unique thing name
@@ -58,8 +59,8 @@ async function createSensors(){
         //create the IOT policy
         var policyName = 'Policy-' + sensor.settings.clientId;
         var policy = { policyName: policyName, policyDocument: JSON.stringify(policyDocument)};
-        result = await  iot.createPolicy(policy).promise()
-        const policyArn = result.policyArn;
+        result = await iot.createPolicy(policy).promise()
+        //const policyArn = result.policyArn;
 
         //create the certificates
         result = await iot.createKeysAndCertificate({setAsActive:true}).promise();
@@ -77,6 +78,9 @@ async function createSensors(){
         sensor.settings.keyPath = fileName;
         await fs.writeFile(fileName, privateKey);
 
+        //save the AWS root certificate
+        sensor.settings.caPath = CERT_FOLDER + ROOT_CA_FILE;
+      
         //create the thing type
         params = {
           thingTypeName: sensor.thingTypeName
@@ -105,11 +109,11 @@ async function createSensors(){
         //attach thing to certificate
         await iot.attachThingPrincipal({thingName: sensor.settings.clientId, principal: certificateArn}).promise();
 
+        //save the updated settings file
+        let data = JSON.stringify(sensors, null, 2);
+        console.log(data);
+        await fs.writeFile(SENSORS_FILE, data);
     })
-
-    //save the updated settings file
-    let data = JSON.stringify(sensors, null, 2);
-    await fs.writeFile(SENSORS_FILE, data);
 
     //display results
     console.log('IOT devices provisioned');
