@@ -156,11 +156,39 @@ const SensorPage: React.FC = () => {
       <Grid container spacing={4}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
         <LineChartWidget
-            title="Values"
+            title="pH"
             value={pH}
           />
         </Grid>
       </Grid>
+
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <LineChartWidget
+            title="Temperature"
+            value={temperature}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <LineChartWidget
+            title="Salinity"
+            value={salinity}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <LineChartWidget
+            title="Disolved O2"
+            value={disolvedO2}
+          />
+        </Grid>
+      </Grid>
+
     </Container>
   );
 }
