@@ -76,8 +76,8 @@
 				"Runtime": "nodejs10.x",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "amplify-iotjumpstartappsync-dev-101654-deployment",
-					"S3Key": "amplify-builds/createsensorvalue-7935717978694b334879-build.zip"
+					"S3Bucket": "amplify-iotjumpstartappsync-iotbox-185340-deployment",
+					"S3Key": "amplify-builds/createsensorvalue-3750435437444d67317a-build.zip"
 				}
 			}
 		},
