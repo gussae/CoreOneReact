@@ -50,12 +50,18 @@ $ git clone ssh://git.amazon.com/pkg/AWS-iotjumpstart-appsync-workshop
 
 ```
 $ cd aws-appsync-iot-core-realtime-dashboard
+
 $ amplify init
 
 ? Enter a name for the environment: mysandbox
+
 ? Choose your default editor: [select your favorite IDE]
+
 ? Do you want to use an AWS profile? Yes
+
 ? Please choose the profile you want to use: default
+
+? Do you want to configure Lambda Triggers for Cognito? (Y/n) n
 ```
 
 When you select your profile, make sure to select the same profile you used when configuring Amplify.
