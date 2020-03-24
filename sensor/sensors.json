@@ -15,7 +15,7 @@
       "keyPath": "",
       "certPath": "",
       "caPath": "",
-      "clientId": ""
+      "clientId": "sensor-sf-east"
     }
   },
   {
@@ -34,7 +34,7 @@
       "keyPath": "",
       "certPath": "",
       "caPath": "",
-      "clientId": ""
+      "clientId": "sensor-sf-southeast"
     }
   },
   {
@@ -53,7 +53,7 @@
       "keyPath": "",
       "certPath": "",
       "caPath": "",
-      "clientId": ""
+      "clientId": "sensor-sf-southwest"
     }
   },
   {
@@ -72,7 +72,7 @@
       "keyPath": "",
       "certPath": "",
       "caPath": "",
-      "clientId": ""
+      "clientId": "sensor-sf-west"
     }
   },
   {
@@ -91,7 +91,7 @@
       "keyPath": "",
       "certPath": "",
       "caPath": "",
-      "clientId": ""
+      "clientId": "sensor-sf-northwest"
     }
   },
   {
@@ -110,7 +110,7 @@
       "keyPath": "",
       "certPath": "",
       "caPath": "",
-      "clientId": ""
+      "clientId": "sensor-sf-west"
     }
   }
 ]
