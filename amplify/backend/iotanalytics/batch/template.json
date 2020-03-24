@@ -146,7 +146,7 @@
                },
                "TopicRulePayload": {
                   "RuleDisabled": "false",
-                  "Sql": "SELECT * FROM 'dt/bay-health/SF/+/sensor-value'",
+                  "Sql": "SELECT *, topic(4) as sensorid FROM 'dt/bay-health/SF/+/sensor-value'",
                   "AwsIotSqlVersion": "2016-03-23",
                   "Actions": [
                     {
