@@ -1,11 +1,10 @@
 {
-    "ProjectName": "jumpstart-IoTAnalyticsProject",
-    "ChannelName": "jumpstart-channel",
-    "DatastoreName": "jumpstart-datastore",
-    "PipelineName": "jumpstart-pipeline",
-    "DatasetName": "jumpstart-dataset",
-    "SqlQuery": "select * from jumpstart-Datastore",
+    "ProjectName": "jumpstart_IoTAnalyticsProject",
+    "ChannelName": "jumpstart_channel",
+    "DatastoreName": "jumpstart_datastore",
+    "PipelineName": "jumpstart_pipeline",
+    "DatasetName": "jumpstart_dataset",
+    "SqlQuery": "select * from jumpstart_datastore",
     "ScheduleExpression": "cron(0 10 * * ? *)",
-    "IotArule": "amplify-iot-analytics-topic-rule",
-    "env": "dev"
+    "IotArule": "amplify_iot_analytics_topic_rule"
 }
