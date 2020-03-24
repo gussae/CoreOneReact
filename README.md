@@ -141,13 +141,13 @@ You will see output from the app as it connects to IoT Core and publishes new me
 ```
 connected to IoT Hub
 
-published to shadow topic $aws/things/sensor-1584818425862/shadow/update {"state":{"reported":{"name":"SF Bay - Southwest","enabled":true,"geo":{"latitude":37.602464,"longitude":-122.338036}}}}
+published to shadow topic $aws/things/sensor-sf-east/shadow/update {"state":{"reported":{"name":"SF Bay - Southwest","enabled":true,"geo":{"latitude":37.602464,"longitude":-122.338036}}}}
 
-published to telemetry topic dt/bay-health/SF/sensor-1584818425862/sensor-value {"pH":3.9,"temperature":6.6,"salinity":9.7,"disolvedO2":7.9,"timestamp":1584818232693}
+published to telemetry topic dt/bay-health/SF/sensor-sf-east/sensor-value {"pH":3.9,"temperature":6.6,"salinity":9.7,"disolvedO2":7.9,"timestamp":1584818232693}
 
-published to telemetry topic dt/bay-health/SF/sensor-1584818425862/sensor-value {"pH":7.9,"temperature":3.5,"salinity":9.2,"disolvedO2":5.5,"timestamp":1584818234707}
+published to telemetry topic dt/bay-health/SF/sensor-sf-east/sensor-value {"pH":7.9,"temperature":3.5,"salinity":9.2,"disolvedO2":5.5,"timestamp":1584818234707}
 
-published to telemetry topic dt/bay-health/SF/sensor-1584818425862/sensor-value {"pH":3.4,"temperature":10.6,"salinity":7.6,"disolvedO2":7.7,"timestamp":1584818234782}
+published to telemetry topic dt/bay-health/SF/sensor-sf-east/sensor-value {"pH":3.4,"temperature":10.6,"salinity":7.6,"disolvedO2":7.7,"timestamp":1584818234782}
 ```
 
 Keep this app running and switch to the terminal window for the **root** folder for the app.

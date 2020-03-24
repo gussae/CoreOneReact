@@ -52,8 +52,7 @@ async function createSensors(){
     //iterate over all sensors and create policies, certs, and things
     sensors.forEach(async (sensor) => {
 
-        //create a unique thing name
-        sensor.settings.clientId = "sensor-" + new Date().getTime();
+        //set the iot core endpoint
         sensor.settings.host = host;
     
         //create the IOT policy
