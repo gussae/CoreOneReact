@@ -1,14 +1,10 @@
 # aws-appsync-iot-core-realtime-dashboard
 
-This application demonstrates a web application dashboard receiving real-time updates from a series of IoT sensors.  It depicts a fictitious set of pH sensors deployed around the San Francisco Bay. The solution is built with React, AWS AppSync, and AWS IoT Core technologies.
+This application demonstrates a web application and a BI dashboard receiving real-time or batch updates from a series of IoT sensors.  It depicts a fictitious set of sensors deployed around the San Francisco Bay. The solution is built with React, AWS AppSync, AWS IoT Core, AWS IoT Analytics, Amazon Quicksight and AWS Identity services.
 
 ![Image description](images/map.jpg)
 
 The sensors are represented as the colored dots.  Their color will fluxuate between red, green, and yellow based on the messages received from the sensors.
-
-Click on a sensor to view the detailed values received in realtime from that specific sensor.
-
-![Image description](images/sensor.jpg)
 
 ## Architecture
 
@@ -180,6 +176,10 @@ Cognito will then email you a confirmation code.  Enter this code into the subse
 You should now see a screen similar to the one at the top of this guide.  If you look at the terminal window running the sensor app, you shoud see the values being published to the Cloud reflected in the web app's sensor gauge in real-time.
 
 From the initial map screen, click on a sensor to navigate to the sensor's detail page.
+
+Click on a sensor to view the detailed values received in realtime from that specific sensor.
+
+![Image description](images/sensor.jpg)
 
 **Use the BI Dashboard**
 
