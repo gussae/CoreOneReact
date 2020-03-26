@@ -16,11 +16,13 @@ Click on a sensor to view the detailed values received in realtime from that spe
 
 1. The sensor component is developed with the AWS IoT Device SDK for Javascript.  The sensors are registered as _Things_ in IoT Core and publish random values to the Cloud on a configurable frequency.  Metadata about each sensor, such as its geolocation, is stored in a _Thing Shadow_.
 
-2. A rule in IoT Core subscribes to the message topic and forwards the JSON payload to a Lambda function and an IoT Analytic.
+2. A rule in IoT Core subscribes to the message topic and forwards the JSON payload to a Lambda function and the IoT Analytics pipeline.
 
 3. The Node js Lambda function executes a GraphQL mutatation in AppSync.  The mutation saves the latest value for the sensor in DynamoDB and broadcasts the latest value in real-time to the web dashboard. The Lambda function uses an IAM role and policy to obtain permissions to interact with AppSync.
 
 4. The React web dashboard application is written in Typescript and subscribes to the AppSync sensor subscriptions.  When new  values are received, the map on the screen is updated in real-time to reflect the new sensor values. The application uses Cognito to authenticate users and allow them to perform the AppSync subscription. 
+
+5. The Quicksight dashboard generates charts / reports for Business Intelligence functions using data from the IoT Analytics timeseries optimised datastore. 
 
 ## Getting Started
 
@@ -179,6 +181,33 @@ You should now see a screen similar to the one at the top of this guide.  If you
 
 From the initial map screen, click on a sensor to navigate to the sensor's detail page.
 
+**Use the BI Dashboard**
+
+Go to the AWS Quicksight console in North Virginia region - 
+
+```
+a. Enroll for standard edition (if you have not used it before)
+b. Click on your login user (upper right) -> Manage Quicksight -> Account Settings -> Add and Remove -> Check IOT Analytics -> Apply
+c. Click on Quicksight logo (upper left) to navigate to home page 
+d. Change the region to your working region now
+```
+Once the configuration is complete , please do the following - 
+```
+a. Select New Analysis -> New data set -> Choose AWS IOT Analytics
+b. Select an AWS IOT Analytics dataset to import - Choose jumpstart_dataset
+d. Click Create data source -> Visualize
+e. Determine the home energy consumption - 
+    i.   Choose sensorid for Y axis 
+    ii.  Choose all the sensor* readings for Value axis
+    iii. Choose average from Value drop down
+```
+The graphs may look similar to below.
+
+![Image description](images/quicksight.jpg)
+
+Please feel free to play with different visual types for visualizing other smart home related information. 
+
+
 ## Cleanup
 
 Once you are finished working with this project, you may want to delete the resources it created in your AWS account.  From the **root** folder:
@@ -187,6 +216,8 @@ Once you are finished working with this project, you may want to delete the reso
 $ amplify delete
 ? Are you sure you want to continue? (This would delete all the environments of the project from the cloud and wipe out all the local amplify resource files) (Y/n)  Y
 ```
+
+Please navigate to AWS Quicksight console, choose all analysis and delete the jumpstart_dataset manually. 
 
 ## Troubleshooting
 
