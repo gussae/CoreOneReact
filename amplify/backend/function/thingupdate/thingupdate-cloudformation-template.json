@@ -149,6 +149,13 @@
 									}
 								]
 							}
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"iot:DescribeEndpoint"
+							],
+							"Resource": "*"
 						}
 					]
 				}
