@@ -40,3 +40,7 @@ type Query {
   listSensors: [Sensor] @function(name: "iotjumpstart-list-sensors-${env}")
   getSensor(sensorId: String!): Sensor @function(name: "iotjumpstart-get-sensor-${env}")
 }
+
+type Mutations {  
+  updateSensor(sensorId: String!): Sensor @function(name: "thingupdate-${env}")
+}
