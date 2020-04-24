@@ -42,5 +42,5 @@ type Query {
 }
 
 type Mutations {  
-  updateSensor(sensorId: String!): Sensor @function(name: "thingupdate-${env}")
+  updateSensor(sensorId: String!, enabled: Boolean!): Sensor @function(name: "thingupdate-${env}")
 }

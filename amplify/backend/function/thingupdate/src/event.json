@@ -1,6 +1,6 @@
 {
   "arguments": {
     "sensorId": "sensor-sf-southeast",
-    "desiredState": "false"
+    "enabled": "false"
   }
 }

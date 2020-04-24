@@ -14,7 +14,7 @@ exports.handler = async (event) => {
     //you must have fleet indexing enabled in IoT Core with REGISTRY_AND_SHADOW indexed
 
     const sensorId = event.arguments.sensorId || "";
-    const desiredState = event.arguments.desiredState || "true";
+    const enabledState = event.arguments.enabled || "true";
 
     try {
 
@@ -22,20 +22,34 @@ exports.handler = async (event) => {
             var result = await iot.describeEndpoint(params).promise();
             const host = result.endpointAddress;
             var iotdata = new AWS.IotData({endpoint: host});
-            
+            console.log(host);
+            var shadowDocument = {
+              state: {
+                  reported: {
+                      //name: "",
+                      enabled: enabledState
+                      /*geo: {
+                          latitude: 0,
+                          longitude: 0
+                      }*/
+                  }
+              }
+          }
+            var payload_value = JSON.stringify(shadowDocument);
             var params = {
-                //queryString: 'shadow.reported.name:* AND thingName:' + sensorId
-                payload: `{"enabled":"${desiredState}"}` /* Strings will be Base-64 encoded on your behalf */, /* required */
+                payload: payload_value /* Strings will be Base-64 encoded on your behalf */, /* required */
                 thingName: sensorId /* required */
             };
-            
+            console.log("about to update shadow");
             iotdata.updateThingShadow(params, function(err, data) {
               if (err) {
+                   console.log("error");
                     console.log(err, err.stack); // an error occurred  
                     return err.stack;
                 }                
               else 
               {    
+                console.log("data");
                 console.log(data);           // successful response
                 return data;
               }

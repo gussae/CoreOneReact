@@ -7,7 +7,7 @@ var sensors = require('./sensors.json');
 const SHADOW_TOPIC = "$aws/things/[thingName]/shadow/update";
 const VALUE_TOPIC = "dt/bay-health/SF/[thingName]/sensor-value"; //topic to which sensor values will be published
 
-//shadow document to be transmitted at statup
+//shadow document to be transmitted at startup
 var shadowDocument = {
     state: {
         reported: {
