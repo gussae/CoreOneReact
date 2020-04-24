@@ -156,7 +156,8 @@
 								"iot:DescribeEndpoint",
 								"iot:Publish",
 								"iot:GetThingShadow",
-								"iot:UpdateThingShadow"
+								"iot:UpdateThingShadow",
+								"iot:SearchIndex"
 							],
 							"Resource": "*"
 						}

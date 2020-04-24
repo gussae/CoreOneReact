@@ -51,7 +51,27 @@ exports.handler = async (event) => {
               {    
                 console.log("data");
                 console.log(data);           // successful response
-                return data;
+
+                var params = {
+                    queryString: 'shadow.reported.name:* AND thingName:' + sensorId
+                };
+        
+                var result = iot.searchIndex(params).promise();
+        
+                if (result.things.length > 0) {
+        
+                    var element = result.things[0];
+        
+                    var shadow = JSON.parse(element.shadow);
+            
+                    shadow.reported.sensorId = element.thingName;
+            
+                    return shadow.reported;
+                }
+                else {
+
+                    throw new Error("Sensor not found:" + sensorId);
+                }                
               }
             });
     }

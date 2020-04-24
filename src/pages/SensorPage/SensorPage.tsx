@@ -6,7 +6,8 @@ import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { onCreateSensorValue } from '../../graphql/subscriptions';
-import { GetSensor } from '../../api/Sensors';
+//import { GetSensor} from '../../api/Sensors';
+import { UpdateSensor } from '../../api/Sensors';
 import NumericWidget, { WIDGET_MODE } from '../../components/NumericWidget/NumericWidget';
 import LineChartWidget from '../../components/LineChartWidget/LineChartWidget';
 
@@ -57,7 +58,7 @@ const SensorPage: React.FC = () => {
 
       try {
 
-        const response = await GetSensor(id || "");
+        const response = await UpdateSensor(id || "", false);
 
         if (response) {
           setName(response.name);

@@ -299,3 +299,19 @@ export type OnCreateSensorValuesSubscription = {
     timestamp: number,
   } | null,
 };
+
+
+export type UpdateSensorStateMutation = {
+  updateSensorState:  {      
+    __typename: "Sensor",
+    sensorId: string,
+    name: string,
+    enabled: boolean,
+    geo:  {
+      __typename: "Geo",
+      latitude: number,
+      longitude: number,
+    },
+    status: number | null,
+  } | null,
+};

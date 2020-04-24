@@ -1,6 +1,7 @@
 import { API, graphqlOperation } from 'aws-amplify';
 import { getSensor, listSensors } from '../graphql/queries';
-import { GetSensorQuery, ListSensorsQuery } from '../API';
+import { updateSensorState } from '../graphql/mutations';
+import { GetSensorQuery, ListSensorsQuery, UpdateSensorStateMutation } from '../API';
 
 interface IGeo {
     latitude: number,
@@ -73,6 +74,30 @@ export const GetSensors = async (): Promise<Array<ISensor>> => {
         else {
 
             return Array<ISensor>();
+        }
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const UpdateSensor = async (sensorId: string, enabled: boolean): Promise<ISensor | null> => {
+
+    try {
+
+        const response = (await API.graphql(graphqlOperation(updateSensorState, {sensorId: sensorId, enabled: enabled}))) as {
+            data: UpdateSensorStateMutation;
+          };
+
+        if (response.data.updateSensorState){
+            
+            const r = response.data.updateSensorState as ISensor;
+            
+            return r;
+        }
+        else {
+
+            return null;
         }
 
     } catch (error) {

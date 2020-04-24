@@ -41,6 +41,6 @@ type Query {
   getSensor(sensorId: String!): Sensor @function(name: "iotjumpstart-get-sensor-${env}")
 }
 
-type Mutations {  
-  updateSensor(sensorId: String!, enabled: Boolean!): Sensor @function(name: "thingupdate-${env}")
+type Mutation {  
+  updateSensorState(sensorId: String!, enabled: Boolean!): Sensor @function(name: "thingupdate-${env}") @aws_iam @aws_cognito_user_pools
 }

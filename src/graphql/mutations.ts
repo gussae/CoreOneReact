@@ -52,3 +52,17 @@ export const deleteSensorValue = /* GraphQL */ `
     }
   }
 `;
+export const updateSensorState = /* GraphQL */ `
+  mutation UpdateSensorState($sensorId: String!, $enabled: Boolean!) {
+    updateSensorState(sensorId: $sensorId, enabled: $enabled) {      
+      sensorId
+      name
+      enabled
+      geo {
+        latitude
+        longitude
+      }
+      status
+    }
+  }
+`;
