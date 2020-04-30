@@ -59,10 +59,10 @@
 						"REGION": {
 							"Ref": "AWS::Region"
 						},
-						"API_coreoneAPPSYNC_GRAPHQLAPIIDOUTPUT": {
+						"API_COREONEAPPSYNC_GRAPHQLAPIIDOUTPUT": {
 							"Ref": "apicoreoneappsyncGraphQLAPIIdOutput"
 						},
-						"API_coreoneAPPSYNC_GRAPHQLAPIENDPOINTOUTPUT": {
+						"API_COREONEAPPSYNC_GRAPHQLAPIENDPOINTOUTPUT": {
 							"Ref": "apicoreoneappsyncGraphQLAPIEndpointOutput"
 						}
 					}

@@ -23,10 +23,10 @@ exports.handler = async (event) => {
   const req = new AWS.HttpRequest(appsyncUrl, region);
 
   //define the graphql mutation to create the device values
-  const mutationName = 'CreateDeviceValue';
+  const mutationName = 'CreateCoreOneIncomingData';
 
-  const mutation = `mutation CoreOneIncomingData(
-      $input: CreateCoreOneIncomingDataValueInput!
+  const mutation = `mutation CreateCoreOneIncomingData(
+      $input: CreateCoreOneIncomingDataInput!
       $condition: ModelCoreOneIncomingDataConditionInput
     ) {
       createCoreOneIncomingData(input: $input, condition: $condition) {
@@ -36,42 +36,28 @@ exports.handler = async (event) => {
         timestamp
       }
     }`;
-
-    //set a random device status 1-3
-    let status = Math.floor(Math.random() * 3) + 1;
     
     //create the mutuation input from the device event data
     const payload = {
-      DeviceType: ,
-      CurrentTemp: ,
-      State: ,
-      Pressure: ,
-      Flow: ,
-      Energy: ,
-      UV: ,
-      Angle: ,
-      Longitude: ,
-      Latitude: 
+      DeviceType: event.data.deviceType,
+      CurrentTemp: event.data.currentTemp,
+      State: event.data.state,
+      Pressure: event.data.pressure,
+      Flow: event.data.flow,
+      Energy: event.data.energy,
+      UV: event.data.UV,
+      Angle: event.data.angle,
+      Longitude: event.data.longitude,
+      Latitude: event.data.latitude 
     }
-    /*
-      Input Payload:
-      =============
-      DeviceType
-      CurrentTemp
-      State
-      Pressure
-      Flow
-      Energy
-      UV
-      Angle
-      Longitude
-      Latitude
-    */
+
+    const jsonPayload = JSON.stringify(payload);
+
     const item = {
       input: {
         device_id: event.deviceId,
         device_type: event.data.deviceType,
-        payload: payload,
+        payload: jsonPayload,
         timestamp: event.data.timestamp
       }
     };
