@@ -4,6 +4,7 @@
     "State": false,
     "latitude": 37.692625,
     "longitude": -122.200682,
+    "cognitoUserId": "cognitoUserId-1",
     "settings": {
       "host": "",
       "keyPath": "",
@@ -17,6 +18,7 @@
     "State": false,
     "latitude": 37.612215,
     "longitude": -122.162933,
+    "cognitoUserId": "cognitoUserId-2",
     "settings": {
       "host": "",
       "keyPath": "",
@@ -30,6 +32,7 @@
     "State": false,
     "latitude": 37.602464,
     "longitude": -122.338036,
+    "cognitoUserId": "cognitoUserId-3",
     "settings": {
       "host": "",
       "keyPath": "",
@@ -43,6 +46,7 @@
     "State": false,
     "latitude": 37.66228,
     "longitude": -122.36549,
+    "cognitoUserId": "cognitoUserId-4",
     "settings": {
       "host": "",
       "keyPath": "",
@@ -56,6 +60,7 @@
     "State": false,
     "latitude": 37.751372,
     "longitude": -122.359999,
+    "cognitoUserId": "cognitoUserId-5",
     "settings": {
       "host": "",
       "keyPath": "",
@@ -69,6 +74,7 @@
     "State": false,
     "latitude": 37.800307,
     "longitude": -122.354788,
+    "cognitoUserId": "cognitoUserId-6",
     "settings": {
       "host": "",
       "keyPath": "",

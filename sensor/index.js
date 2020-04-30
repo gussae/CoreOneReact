@@ -4,19 +4,18 @@ const awsIot = require('aws-iot-device-sdk');
 var sensors = require('./sensors.json');
 
 //constants used in the application
-const SHADOW_TOPIC = "$aws/things/[thingName]/shadow/update";
-const VALUE_TOPIC = "dt/bay-health/SF/[thingName]/sensor-value"; //topic to which sensor values will be published
+const SHADOW_TOPIC = "$aws/things/[deviceId]/shadow/update";
+//"$aws/things/[thingName]/shadow/update";
+const VALUE_TOPIC = "dt/coreone/[cognitoUserId]/[deviceId]/all" //topic to which sensor values will be published
+//"dt/bay-health/SF/[thingName]/sensor-value"; 
 
 //shadow document to be transmitted at startup
 var shadowDocument = {
     state: {
         reported: {
-            name: "",
-            enabled: true,
-            geo: {
-                latitude: 0,
-                longitude: 0
-            }
+            DeviceType: "",
+            SetTemp: 0,            
+            State: true,            
         }
     }
 }
@@ -28,11 +27,17 @@ async function run(sensor) {
 
     //create a placeholder for the message
     var msg = {
-        pH: 0,
-        temperature: 0,
-        salinity: 0,
-        disolvedO2: 0,
-        timestamp: new Date().getTime()
+        timestamp: new Date().getTime(),
+        deviceType: sensor.DeviceType,
+        currentTemp: 0,
+        state: true,
+        pressure: 0,
+        flow: 0,
+        energy: 0,
+        UV: 0,
+        angle: 0,
+        longitude: sensor.longitude,
+        latitude: sensor.latitude
     }
 
     device.on('connect', function() {
@@ -40,12 +45,11 @@ async function run(sensor) {
         console.log('connected to IoT Hub');
     
         //publish the shadow document for the sensor
-        var topic = SHADOW_TOPIC.replace('[thingName]', sensor.settings.clientId);
+        var topic = SHADOW_TOPIC.replace('[deviceId]', sensor.settings.clientId);
     
-        shadowDocument.state.reported.name = sensor.name;
-        shadowDocument.state.reported.enabled = true;
-        shadowDocument.state.reported.geo.latitude = sensor.geo.latitude;
-        shadowDocument.state.reported.geo.longitude = sensor.geo.longitude;
+        shadowDocument.state.reported.DeviceType = sensor.DeviceType;
+        shadowDocument.state.reported.SetTemp = 0;
+        shadowDocument.state.reported.State = true;        
     
         device.publish(topic, JSON.stringify(shadowDocument)); 
     
@@ -55,15 +59,19 @@ async function run(sensor) {
         setInterval(function(){
 
             //calculate randome values for each sensor reading
-            msg.pH = RandomValue(50, 100) / 10;
-            msg.temperature = RandomValue(480, 570) / 10;
-            msg.salinity = RandomValue(200, 350) / 10;
-            msg.disolvedO2 = RandomValue(40, 120) / 10;
+            msg.currentTemp = RandomValue(480, 570) / 10;
+            msg.state = true;
+            msg.pressure = RandomValue(50, 100) / 10;
+            msg.flow = RandomValue(50, 100) / 10;
+            msg.energy = RandomValue(50, 100) / 10;
+            msg.UV = RandomValue(50, 100) / 10;
+            msg.angle = RandomValue(0, 3600) / 10;
 
             msg.timestamp = new Date().getTime();
 
             //publish the sensor reading message
-            var topic = VALUE_TOPIC.replace('[thingName]', sensor.settings.clientId);
+            var topic = VALUE_TOPIC.replace('[deviceId]', sensor.settings.clientId);
+            topic = topic.replace('[cognitoUserId]', sensor.cognitoUserId);            
 
             device.publish(topic, JSON.stringify(msg)); 
 

@@ -13,5 +13,5 @@
         "latitude": 37.692625
     },
     "deviceId": "device-test",
-    "cognitoUserId": "clientid-1"
+    "cognitoUserId": "cognitoUserId-1"
 }
