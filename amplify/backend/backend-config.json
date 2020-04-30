@@ -1,13 +1,13 @@
 {
 	"auth": {
-		"iotjumpstartappsync": {
+		"coreoneappsync": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": []
 		}
 	},
 	"api": {
-		"iotjumpstartappsync": {
+		"coreoneappsync": {
 			"service": "AppSync",
 			"providerPlugin": "awscloudformation",
 			"output": {
@@ -20,7 +20,7 @@
 					"defaultAuthentication": {
 						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
 						"userPoolConfig": {
-							"userPoolId": "authiotjumpstartappsync"
+							"userPoolId": "authcoreoneappsync"
 						}
 					}
 				}
@@ -28,14 +28,14 @@
 		}
 	},
 	"function": {
-		"createsensorvalue": {
+		"createdevicevalue": {
 			"service": "Lambda",
 			"providerPlugin": "awscloudformation",
 			"build": true,
 			"dependsOn": [
 				{
 					"category": "api",
-					"resourceName": "iotjumpstartappsync",
+					"resourceName": "coreoneappsync",
 					"attributes": [
 						"GraphQLAPIIdOutput",
 						"GraphQLAPIEndpointOutput"
@@ -43,12 +43,12 @@
 				}
 			]
 		},
-		"listsensors": {
+		"listdevices": {
 			"service": "Lambda",
 			"providerPlugin": "awscloudformation",
 			"build": true
 		},
-		"getsensor": {
+		"getdevice": {
 			"service": "Lambda",
 			"providerPlugin": "awscloudformation",
 			"build": true
@@ -60,12 +60,12 @@
 		}
 	},
 	"iotrule": {
-		"createsensorvalue": {
+		"createdevicevalue": {
 			"providerPlugin": "awscloudformation",
 			"dependsOn": [
 				{
 					"category": "function",
-					"resourceName": "createsensorvalue",
+					"resourceName": "createdevicevalue",
 					"attributes": [
 						"Arn"
 					]

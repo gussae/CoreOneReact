@@ -67,7 +67,7 @@
 				"Runtime": "nodejs12.x",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "amplify-iotjumpstartappsync-sbone-121708-deployment",
+					"S3Bucket": "amplify-coreoneappsync-sbone-121708-deployment",
 					"S3Key": "amplify-builds/thingupdate-6a5846386637546a7539-build.zip"
 				}
 			}
@@ -78,12 +78,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"iotjumpstartappsyncLambdaRole965d57e9",
+						"coreoneappsyncLambdaRole965d57e9",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"iotjumpstartappsyncLambdaRole965d57e9",
+									"coreoneappsyncLambdaRole965d57e9",
 									"-",
 									{
 										"Ref": "env"

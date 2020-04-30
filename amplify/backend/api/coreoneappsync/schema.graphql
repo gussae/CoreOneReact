@@ -1,0 +1,60 @@
+type CoreOneAssigned @model (subscriptions: null)
+@auth (
+    rules: [
+        { allow: private, provider: iam},
+        { allow: private, provider: userPools}
+    ]
+)
+{
+  client_id: String
+  device_id: String!
+  device_type: String!
+  status_value: Int!
+}
+
+type CoreOneIncomingData @model (subscriptions: null)
+@auth (
+    rules: [
+        { allow: private, provider: iam},
+        { allow: private, provider: userPools}
+    ]
+) 
+{
+  device_id: String!
+  device_type: String!
+  payload: AWSJSON!
+  timestamp: AWSTimestamp!
+}
+
+type CoreOneOutgoingData @model (subscriptions: null)
+@auth (
+    rules: [
+        { allow: private, provider: iam},
+        { allow: private, provider: userPools}
+    ]
+) 
+{
+  device_id: String!
+  device_type: String!
+  payload: AWSJSON!
+  timestamp: AWSTimestamp!
+}
+
+type Query {
+  getCoreOneLatestData(device_id: String!): CoreOneIncomingData @function(name: "get-device-${env}") @aws_iam @aws_cognito_user_pools
+  listCoreOne(client_id: String!): [CoreOneAssigned] @function(name: "list-devices-${env}") @aws_iam @aws_cognito_user_pools
+}
+
+type Subscription {
+  onUpdateCoreOneIncomingDataValue(device_id: String!): CoreOneIncomingData @aws_subscribe(mutations : ["createCoreOneIncomingData"]) @aws_iam @aws_cognito_user_pools  
+  onUpdateCoreOneIncomingDataValues: CoreOneIncomingData @aws_subscribe(mutations: ["createCoreOneIncomingData"]) @aws_iam @aws_cognito_user_pools
+}
+
+type Mutation {  
+  updateCoreOne(device_id: String!, input: CoreOneDeviceDataInput!): CoreOneOutgoingData @function(name: "thingupdate-${env}") @aws_iam @aws_cognito_user_pools
+}
+
+input CoreOneDeviceDataInput {
+  payload: AWSJSON
+  timestamp: AWSTimestamp!
+}

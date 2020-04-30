@@ -3,41 +3,41 @@
 		"env": {
 			"Type": "String"
         },
-        "functioncreatesensorvalueArn": {
+        "functioncreatedevicevalueArn": {
 			"Type": "String"
 		}
 	},
     "Resources": {
-        "CreateSensorValueRule": {
+        "createdevicevalueRule": {
             "Type": "AWS::IoT::TopicRule",
             "Properties": {
                 "TopicRulePayload": {
                     "Actions": [
                         {
                             "Lambda": {
-                                "FunctionArn": {"Ref":"functioncreatesensorvalueArn"}
+                                "FunctionArn": {"Ref":"functioncreatedevicevalueArn"}
                             }
                         }
                     ],
                     "RuleDisabled": false,
-                    "Sql": "select * as data, topic(4) as sensorId from 'dt/bay-health/SF/+/sensor-value'"
+                    "Sql": "select * as data, topic(3) as cognitoUserId, topic(4) as deviceId from 'dt/coreone/+/+/all'"
                 }
             }
         },
-        "createsensorvalueallowIOTRuleInvocation": {
+        "createdevicevalueallowIOTRuleInvocation": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
                 "Action": "lambda:InvokeFunction",
                 "FunctionName": { 
                     "Fn::Select" : [ "6", {
-                         "Fn::Split": [":", {"Ref": "functioncreatesensorvalueArn"}]
+                         "Fn::Split": [":", {"Ref": "functioncreatedevicevalueArn"}]
                          }
                     ] 
                 },
                 "Principal": "iot.amazonaws.com",
                 "SourceArn": {
                     "Fn::GetAtt": [
-                        "CreateSensorValueRule",
+                        "createdevicevalueRule",
                         "Arn"
                     ]
                 }

@@ -2,8 +2,8 @@
 You can access the following resource attributes as environment variables from your Lambda function
 var environment = process.env.ENV
 var region = process.env.REGION
-var apiIotjumpstartappsyncGraphQLAPIIdOutput = process.env.API_IOTJUMPSTARTAPPSYNC_GRAPHQLAPIIDOUTPUT
-var apiIotjumpstartappsyncGraphQLAPIEndpointOutput = process.env.API_IOTJUMPSTARTAPPSYNC_GRAPHQLAPIENDPOINTOUTPUT
+var apiCoreoneappsyncGraphQLAPIIdOutput = process.env.API_COREONEAPPSYNC_GRAPHQLAPIIDOUTPUT
+var apiCoreoneappsyncGraphQLAPIEndpointOutput = process.env.API_COREONEAPPSYNC_GRAPHQLAPIENDPOINTOUTPUT
 
 Amplify Params - DO NOT EDIT */
 
@@ -13,7 +13,7 @@ const urlParse = require("url").URL;
 
 //environment variables
 const region = process.env.REGION
-const appsyncUrl = process.env.API_IOTJUMPSTARTAPPSYNC_GRAPHQLAPIENDPOINTOUTPUT
+const appsyncUrl = process.env.API_COREONEAPPSYNC_GRAPHQLAPIENDPOINTOUTPUT
 const endpoint = new urlParse(appsyncUrl).hostname.toString();
 
 exports.handler = async (event) => {
@@ -22,37 +22,56 @@ exports.handler = async (event) => {
   
   const req = new AWS.HttpRequest(appsyncUrl, region);
 
-  //define the graphql mutation to create the sensor values
-  const mutationName = 'CreateSensorValue';
+  //define the graphql mutation to create the device values
+  const mutationName = 'CreateDeviceValue';
 
-  const mutation = `mutation CreateSensorValue(
-      $input: CreateSensorValueInput!
-      $condition: ModelSensorValueConditionInput
+  const mutation = `mutation CoreOneIncomingData(
+      $input: CreateCoreOneIncomingDataValueInput!
+      $condition: ModelCoreOneIncomingDataConditionInput
     ) {
-      createSensorValue(input: $input, condition: $condition) {
-        id
-        sensorId
-        pH
-        temperature
-        salinity
-        disolvedO2
-        status
+      createCoreOneIncomingData(input: $input, condition: $condition) {
+        device_id
+        device_type
+        payload
         timestamp
       }
     }`;
 
-    //set a random sensor status 1-3
+    //set a random device status 1-3
     let status = Math.floor(Math.random() * 3) + 1;
     
-    //create the mutuation input from the sensor event data
+    //create the mutuation input from the device event data
+    const payload = {
+      DeviceType: ,
+      CurrentTemp: ,
+      State: ,
+      Pressure: ,
+      Flow: ,
+      Energy: ,
+      UV: ,
+      Angle: ,
+      Longitude: ,
+      Latitude: 
+    }
+    /*
+      Input Payload:
+      =============
+      DeviceType
+      CurrentTemp
+      State
+      Pressure
+      Flow
+      Energy
+      UV
+      Angle
+      Longitude
+      Latitude
+    */
     const item = {
       input: {
-        sensorId: event.sensorId,
-        pH: event.data.pH,
-        temperature: event.data.temperature,
-        salinity: event.data.salinity,
-        disolvedO2: event.data.disolvedO2,
-        status: status,
+        device_id: event.deviceId,
+        device_type: event.data.deviceType,
+        payload: payload,
         timestamp: event.data.timestamp
       }
     };
@@ -94,6 +113,6 @@ exports.handler = async (event) => {
     }
     catch (err) {
       console.log("error: " + err);
-      throw new Error("Error creating sensor value for sensor: " + event.sensorId);
+      throw new Error("Error creating device value for device: " + event.deviceId);
     }
 }

@@ -6,5 +6,5 @@
         "temperature": 48.7,
         "pH": 10
     },
-    "sensorId": "sensor-test"
+    "deviceId": "device-test"
 }

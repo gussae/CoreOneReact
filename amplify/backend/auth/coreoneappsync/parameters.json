@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "iotjumpstartappsync_identitypool",
+    "identityPoolName": "coreoneappsync_identitypool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "iotjum166d5611",
-    "userPoolName": "iotjumpstartappsync_userpool",
+    "resourceNameTruncated": "core1_166d5611",
+    "userPoolName": "coreoneappsync_userpool",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,11 +28,11 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "iotjum166d5611_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "core1_166d5611_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
     "useDefault": "manual",
     "authSelections": "identityPoolAndUserPool",
-    "resourceName": "iotjumpstartappsync",
+    "resourceName": "coreoneappsync",
     "thirdPartyAuth": false,
     "usernameAttributes": [
         "email"

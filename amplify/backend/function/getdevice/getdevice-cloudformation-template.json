@@ -28,12 +28,12 @@
 				"FunctionName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"iotjumpstart-list-sensors",
+						"get-device",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"iotjumpstart-list-sensors",
+									"get-device",
 									"-",
 									{
 										"Ref": "env"
@@ -62,8 +62,8 @@
 				"Runtime": "nodejs10.x",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "amplify-iotjumpstartappsync-iotbox-185340-deployment",
-					"S3Key": "amplify-builds/listsensors-396a437348522f685261-build.zip"
+					"S3Bucket": "amplify-coreoneappsync-iotbox-185340-deployment",
+					"S3Key": "amplify-builds/getdevice-43596a55496f31585937-build.zip"
 				}
 			}
 		},
@@ -73,12 +73,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"iotjumpstartappsyncLambdaRole46133bc6",
+						"coreoneappsyncLambdaRolede69c68f",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"iotjumpstartappsyncLambdaRole46133bc6",
+									"coreoneappsyncLambdaRolede69c68f",
 									"-",
 									{
 										"Ref": "env"

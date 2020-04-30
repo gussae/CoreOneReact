@@ -4,14 +4,6 @@
 	"Parameters": {
 		"env": {
 			"Type": "String"
-		},
-		"apiiotjumpstartappsyncGraphQLAPIIdOutput": {
-			"Type": "String",
-			"Default": "apiiotjumpstartappsyncGraphQLAPIIdOutput"
-		},
-		"apiiotjumpstartappsyncGraphQLAPIEndpointOutput": {
-			"Type": "String",
-			"Default": "apiiotjumpstartappsyncGraphQLAPIEndpointOutput"
 		}
 	},
 	"Conditions": {
@@ -36,12 +28,12 @@
 				"FunctionName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"iotjumpstart-create-sensorvalue",
+						"list-devices",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"iotjumpstart-create-sensorvalue",
+									"list-devices",
 									"-",
 									{
 										"Ref": "env"
@@ -58,12 +50,6 @@
 						},
 						"REGION": {
 							"Ref": "AWS::Region"
-						},
-						"API_IOTJUMPSTARTAPPSYNC_GRAPHQLAPIIDOUTPUT": {
-							"Ref": "apiiotjumpstartappsyncGraphQLAPIIdOutput"
-						},
-						"API_IOTJUMPSTARTAPPSYNC_GRAPHQLAPIENDPOINTOUTPUT": {
-							"Ref": "apiiotjumpstartappsyncGraphQLAPIEndpointOutput"
 						}
 					}
 				},
@@ -76,8 +62,8 @@
 				"Runtime": "nodejs10.x",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "amplify-iotjumpstartappsync-iotbox-185340-deployment",
-					"S3Key": "amplify-builds/createsensorvalue-3750435437444d67317a-build.zip"
+					"S3Bucket": "amplify-coreoneappsync-iotbox-185340-deployment",
+					"S3Key": "amplify-builds/listdevices-396a437348522f685261-build.zip"
 				}
 			}
 		},
@@ -87,12 +73,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"iotjumpstartappsyncLambdaRolea344b9c2",
+						"coreoneappsyncLambdaRole46133bc6",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"iotjumpstartappsyncLambdaRolea344b9c2",
+									"coreoneappsyncLambdaRole46133bc6",
 									"-",
 									{
 										"Ref": "env"
@@ -158,55 +144,13 @@
 									}
 								]
 							}
-						}
-					]
-				}
-			}
-		},
-		"AmplifyResourcesPolicy": {
-			"DependsOn": [
-				"LambdaExecutionRole"
-			],
-			"Type": "AWS::IAM::Policy",
-			"Properties": {
-				"PolicyName": "amplify-lambda-execution-policy",
-				"Roles": [
-					{
-						"Ref": "LambdaExecutionRole"
-					}
-				],
-				"PolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
+						},
 						{
 							"Effect": "Allow",
 							"Action": [
-								"appsync:Create*",
-								"appsync:StartSchemaCreation",
-								"appsync:GraphQL"
+								"iot:SearchIndex"
 							],
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:appsync:",
-											{
-												"Ref": "AWS::Region"
-											},
-											":",
-											{
-												"Ref": "AWS::AccountId"
-											},
-											":apis/",
-											{
-												"Ref": "apiiotjumpstartappsyncGraphQLAPIIdOutput"
-											},
-											"/*"
-										]
-									]
-								}
-							]
+							"Resource": "*"
 						}
 					]
 				}
