@@ -48,7 +48,8 @@ exports.handler = async (event) => {
       UV: event.data.UV,
       Angle: event.data.angle,
       Longitude: event.data.longitude,
-      Latitude: event.data.latitude 
+      Latitude: event.data.latitude,
+      cognitoUserId: event.cognitoUserId 
     }
 
     const jsonPayload = JSON.stringify(payload);
