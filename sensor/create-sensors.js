@@ -79,24 +79,21 @@ async function createSensors(){
         //save the AWS root certificate
         sensor.settings.caPath = CERT_FOLDER + ROOT_CA_FILE;
       
-        //create the thing type
+        /*create the thing type
         params = {
-          thingTypeName: sensor.thingTypeName
+          thingTypeName: sensor.DeviceType
         }
         await iot.createThingType(params).promise();
-
+        */
         //create the thing
         params = {
           thingName: sensor.settings.clientId,
           attributePayload: {
             attributes: {
-              'Manufacturer': sensor.manufacturer,
-              'Model': sensor.model,
-              'Firmware': sensor.firmware
             },
             merge: false
-          },
-          thingTypeName: sensor.thingTypeName
+          }/*,
+          thingTypeName: sensor.DeviceType*/
         };
 
         await iot.createThing(params).promise();
