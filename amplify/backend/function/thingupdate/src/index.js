@@ -137,11 +137,11 @@ exports.handler = async (event) => {
 
             console.log("Successful mutation");
 
-            return {
+            /*return {
                 statusCode: 200,
                 body: data
-            };
-
+            };*/
+            return data.data.createCoreOneOutgoingData;
         }
         catch (err) {
             console.log("error: " + err);
