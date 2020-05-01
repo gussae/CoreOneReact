@@ -1,0 +1,47 @@
+{
+    "Parameters": {
+		"env": {
+			"Type": "String"
+        },
+        "functioncreatedevicevalueArn": {
+			"Type": "String"
+		}
+	},
+    "Resources": {
+        "createdevicevalueRule": {
+            "Type": "AWS::IoT::TopicRule",
+            "Properties": {
+                "TopicRulePayload": {
+                    "Actions": [
+                        {
+                            "Lambda": {
+                                "FunctionArn": {"Ref":"functioncreatedevicevalueArn"}
+                            }
+                        }
+                    ],
+                    "RuleDisabled": false,
+                    "Sql": "select * as data, topic(3) as cognitoUserId, topic(4) as deviceId from 'dt/coreone/+/+/all'"
+                }
+            }
+        },
+        "createdevicevalueallowIOTRuleInvocation": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "FunctionName": { 
+                    "Fn::Select" : [ "6", {
+                         "Fn::Split": [":", {"Ref": "functioncreatedevicevalueArn"}]
+                         }
+                    ] 
+                },
+                "Principal": "iot.amazonaws.com",
+                "SourceArn": {
+                    "Fn::GetAtt": [
+                        "createdevicevalueRule",
+                        "Arn"
+                    ]
+                }
+            }
+        }
+    }
+}
