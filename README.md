@@ -1,24 +1,24 @@
-# aws-appsync-iot-core-realtime-dashboard
+# Coreone
 
-This application demonstrates a web application and a BI dashboard receiving real-time or batch updates from a series of IoT sensors.  It depicts a fictitious set of sensors deployed around the San Francisco Bay. The solution is built with React, AWS AppSync, AWS IoT Core, AWS IoT Analytics, Amazon Quicksight and AWS Identity services.
+Coreone application demonstrates a web application dashboard receiving real-time updates from a series of IoT sensors.  It depicts a fictitious set of pH sensors deployed around the San Francisco Bay. The solution is built with React, AWS AppSync, and AWS IoT Core technologies.
 
-![Image description](images/map.jpg)
+![Image description](images/map.png)
 
 The sensors are represented as the colored dots.  Their color will fluxuate between red, green, and yellow based on the messages received from the sensors.
+
+Click on a sensor to view the detailed values received in realtime from that specific sensor.
 
 ## Architecture
 
 ![Image description](images/architecture.jpg)
 
-1. The sensor component is developed with the AWS IoT Device SDK for Javascript.  The sensors are registered as _Things_ in IoT Core and publish random values to the Cloud on a configurable frequency.  Metadata about each sensor, such as its geolocation, is stored in a _Thing Shadow_.
+1. The sensor component is developed with the AWS IoT Device SDK for Javascript.  The sensor is registered as a Thing in IoT Core and publishes random pH values for six sensors in a JSON payload to the Cloud every 2 seconds.
 
-2. A rule in IoT Core subscribes to the message topic and forwards the JSON payload to a Lambda function and the IoT Analytics pipeline.
+2. A rule in IoT Core subscribes to the message topic and forwards the JSON payload to a Lambda function.
 
 3. The Node js Lambda function executes a GraphQL mutatation in AppSync.  The mutation saves the latest value for the sensor in DynamoDB and broadcasts the latest value in real-time to the web dashboard. The Lambda function uses an IAM role and policy to obtain permissions to interact with AppSync.
 
-4. The React web dashboard application is written in Typescript and subscribes to the AppSync sensor subscriptions.  When new  values are received, the map on the screen is updated in real-time to reflect the new sensor values. The application uses Cognito to authenticate users and allow them to perform the AppSync subscription. 
-
-5. The Quicksight dashboard generates charts / reports for Business Intelligence functions using data from the IoT Analytics timeseries optimised datastore. 
+4. The React web dashboard application is written in Typescript and subscribes to the AppSync sensor update subscriptions.  When new  values are received, the map on the screen is updated in real-time to reflect the new sensor values. The application uses Cognito to authenticate users and allow them to perform the AppSync subscription. 
 
 ## Getting Started
 
@@ -41,25 +41,19 @@ If you run into issues installing or configuring anything in this project please
 **Clone this code repository**
 
 ```
-$ git clone ssh://git.amazon.com/pkg/AWS-iotjumpstart-appsync-workshop
+$ git clone https://github.com/aws-samples/aws-appsync-iot-core-realtime-dashboard.git
 ```
 
 **Switch to the app's folder and initialize your Amplify environment**
 
 ```
 $ cd aws-appsync-iot-core-realtime-dashboard
-
 $ amplify init
 
 ? Enter a name for the environment: mysandbox
-
 ? Choose your default editor: [select your favorite IDE]
-
 ? Do you want to use an AWS profile? Yes
-
 ? Please choose the profile you want to use: default
-
-? Do you want to configure Lambda Triggers for Cognito? (Y/n) n
 ```
 
 When you select your profile, make sure to select the same profile you used when configuring Amplify.
@@ -86,27 +80,15 @@ You will then see a series of output messages as Amplify builds and deploys the 
 Resources being created in your account include:
 
 - AppSync GraphQL API
-- DynamoDB Table
-- Cognito User Pool
-- Lambda Functions (3)
+- DynamoDB table
+- Cognito user pool
+- Lambda functions (2)
 - IoT Rules (2)
-- IoT Analytic
 
 **Install the web app's Node js packages**
 
 ```
 $ npm install
-```
-
-**Configure Mapbox API key**
-
-This application uses maps from [Mapbox](https://www.mapbox.com/) to display the sensor locations.  You must create an account and request a free ***default access token***.  Once you have the token, update the ***src/settings.json*** file with the token value.
-
-***src/settings.json***
-```
-{
-    "mapboxApiAccessToken": "your-token-here"
-}
 ```
 
 **Install the IoT sensor simulator**
@@ -118,10 +100,10 @@ Install the Node js packages, and run the Node js app to create your sensor as a
 ```
 $ cd sensor
 $ npm install
-$ node create-sensors.js
+$ node create-sensor.js
 ```
 
-*Note - this will create the sensors using your default AWS profile account and region.  If you have not specified a default region in your local AWS configuration, it will default to us-east-1.
+*Note - this will create the sensor using your default AWS profile account and region.  If you have not specified a default region in your local AWS configuration, it will default to us-east-1.
 
 If you do not have a **default** profile or you are using a profile other than **default**, run the app with an AWS_PROFILE environment variable specifiying the profile name you would like to use.
 
@@ -140,20 +122,15 @@ From the sensor terminal window:
 ```
 $ node index.js
 ```
-You will see output from the app as it connects to IoT Core and publishes new messages for the sensors. Each sensor will first transmit its shadow document and then sensor readings every few seconds according the to the sensor's transmission frequency setting.
+You will see output from the app as it connects to IoT Core and publishes new messages for six sensors every two seconds.
 
 ```
-connected to IoT Hub
+published to topic cmd/sensors/sensor-1/sensor-create {"status":1,"value":0,"timestamp":1570562143384}
 
-published to shadow topic $aws/things/sensor-sf-east/shadow/update {"state":{"reported":{"name":"SF Bay - Southwest","enabled":true,"geo":{"latitude":37.602464,"longitude":-122.338036}}}}
+published to topic dt/sensors/sensor-1/sensor-value {"status":2,"value":80,"timestamp":1570562145788}
 
-published to telemetry topic dt/bay-health/SF/sensor-sf-east/sensor-value {"pH":3.9,"temperature":6.6,"salinity":9.7,"disolvedO2":7.9,"timestamp":1584818232693}
-
-published to telemetry topic dt/bay-health/SF/sensor-sf-east/sensor-value {"pH":7.9,"temperature":3.5,"salinity":9.2,"disolvedO2":5.5,"timestamp":1584818234707}
-
-published to telemetry topic dt/bay-health/SF/sensor-sf-east/sensor-value {"pH":3.4,"temperature":10.6,"salinity":7.6,"disolvedO2":7.7,"timestamp":1584818234782}
+published to topic dt/sensors/sensor-1/sensor-value {"status":3,"value":84,"timestamp":1570562147790}
 ```
-
 Keep this app running and switch to the terminal window for the **root** folder for the app.
 
 **Start the web app**
@@ -177,37 +154,6 @@ You should now see a screen similar to the one at the top of this guide.  If you
 
 From the initial map screen, click on a sensor to navigate to the sensor's detail page.
 
-Click on a sensor to view the detailed values received in realtime from that specific sensor.
-
-![Image description](images/sensor.jpg)
-
-**Use the BI Dashboard**
-
-Go to the AWS Quicksight console in North Virginia region - 
-
-```
-a. Enroll for standard edition (if you have not used it before)
-b. Click on your login user (upper right) -> Manage Quicksight -> Account Settings -> Add and Remove -> Check IOT Analytics -> Apply
-c. Click on Quicksight logo (upper left) to navigate to home page 
-d. Change the region to your working region now
-```
-Once the configuration is complete , please do the following - 
-```
-a. Select New Analysis -> New data set -> Choose AWS IOT Analytics
-b. Select an AWS IOT Analytics dataset to import - Choose jumpstart_dataset
-d. Click Create data source -> Visualize
-e. Determine the home energy consumption - 
-    i.   Choose sensorid for Y axis 
-    ii.  Choose all the sensor* readings for Value axis
-    iii. Choose average from Value drop down
-```
-The graphs may look similar to below.
-
-![Image description](images/quicksight.jpg)
-
-Please feel free to play with different visual types for visualizing other smart home related information. 
-
-
 ## Cleanup
 
 Once you are finished working with this project, you may want to delete the resources it created in your AWS account.  From the **root** folder:
@@ -216,8 +162,6 @@ Once you are finished working with this project, you may want to delete the reso
 $ amplify delete
 ? Are you sure you want to continue? (This would delete all the environments of the project from the cloud and wipe out all the local amplify resource files) (Y/n)  Y
 ```
-
-Please navigate to AWS Quicksight console, choose all analysis and delete the jumpstart_dataset manually. 
 
 ## Troubleshooting
 
