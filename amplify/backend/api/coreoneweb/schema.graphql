@@ -1,0 +1,33 @@
+type Sensor @model (subscriptions: null)
+@auth (
+    rules: [
+        { allow: private, provider: iam},
+        { allow: private, provider: userPools}
+    ]
+)
+@key(fields: ["device_id"])
+{
+  device_id: ID!
+  device_type: String!
+  timestamp: Float
+  payload: AWSJSON!
+}
+
+type ClientDevice @model (subscriptions: null)
+@auth (
+    rules: [
+        { allow: private, provider: iam},
+        { allow: private, provider: userPools}
+    ]
+)
+@key(fields: ["client_id"])
+{
+  client_id: ID!
+  device_id: ID!
+  device_type: String
+}
+
+type Subscription {
+  onUpdateSensor(device_id: ID!): Sensor @aws_subscribe(mutations: ["updateSensor"])
+  onUpdateSensors: Sensor @aws_subscribe(mutations: ["updateSensor"])
+}

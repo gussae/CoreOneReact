@@ -2,8 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const getSensor = /* GraphQL */ `
-  query GetSensor($id: ID!) {
-    getSensor(id: $id) {
+  query GetSensor($device_id: ID!) {
+    getSensor(device_id: $device_id) {
       device_id
       device_type
       timestamp
@@ -13,33 +13,18 @@ export const getSensor = /* GraphQL */ `
 `;
 export const listSensors = /* GraphQL */ `
   query ListSensors(
+    $device_id: ID
     $filter: ModelSensorFilterInput
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
-    listSensors(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        device_id
-        device_type
-        timestamp
-        payload
-      }
-      nextToken
-    }
-  }
-`;
-export const searchSensors = /* GraphQL */ `
-  query SearchSensors(
-    $filter: SearchableSensorFilterInput
-    $sort: SearchableSensorSortInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    searchSensors(
+    listSensors(
+      device_id: $device_id
       filter: $filter
-      sort: $sort
       limit: $limit
       nextToken: $nextToken
+      sortDirection: $sortDirection
     ) {
       items {
         device_id
@@ -48,13 +33,12 @@ export const searchSensors = /* GraphQL */ `
         payload
       }
       nextToken
-      total
     }
   }
 `;
 export const getClientDevice = /* GraphQL */ `
-  query GetClientDevice($id: ID!) {
-    getClientDevice(id: $id) {
+  query GetClientDevice($client_id: ID!) {
+    getClientDevice(client_id: $client_id) {
       client_id
       device_id
       device_type
@@ -63,32 +47,18 @@ export const getClientDevice = /* GraphQL */ `
 `;
 export const listClientDevices = /* GraphQL */ `
   query ListClientDevices(
+    $client_id: ID
     $filter: ModelClientDeviceFilterInput
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
-    listClientDevices(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        client_id
-        device_id
-        device_type
-      }
-      nextToken
-    }
-  }
-`;
-export const searchClientDevices = /* GraphQL */ `
-  query SearchClientDevices(
-    $filter: SearchableClientDeviceFilterInput
-    $sort: SearchableClientDeviceSortInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    searchClientDevices(
+    listClientDevices(
+      client_id: $client_id
       filter: $filter
-      sort: $sort
       limit: $limit
       nextToken: $nextToken
+      sortDirection: $sortDirection
     ) {
       items {
         client_id
@@ -96,7 +66,6 @@ export const searchClientDevices = /* GraphQL */ `
         device_type
       }
       nextToken
-      total
     }
   }
 `;

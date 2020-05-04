@@ -1,13 +1,14 @@
 {
 	"auth": {
-		"coreoneappsync": {
+		"coreoneweb5273cbe6": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
-			"dependsOn": []
+			"dependsOn": [],
+			"customAuth": false
 		}
 	},
 	"api": {
-		"coreoneappsync": {
+		"coreoneweb": {
 			"service": "AppSync",
 			"providerPlugin": "awscloudformation",
 			"output": {
@@ -20,7 +21,7 @@
 					"defaultAuthentication": {
 						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
 						"userPoolConfig": {
-							"userPoolId": "authcoreoneappsync"
+							"userPoolId": "authcoreoneweb5273cbe6"
 						}
 					}
 				}
@@ -28,14 +29,14 @@
 		}
 	},
 	"function": {
-		"createdevicevalue": {
+		"updatesensor": {
 			"service": "Lambda",
 			"providerPlugin": "awscloudformation",
 			"build": true,
 			"dependsOn": [
 				{
 					"category": "api",
-					"resourceName": "coreoneappsync",
+					"resourceName": "coreoneweb",
 					"attributes": [
 						"GraphQLAPIIdOutput",
 						"GraphQLAPIEndpointOutput"
@@ -43,24 +44,14 @@
 				}
 			]
 		},
-		"listdevices": {
+		"createsensor": {
 			"service": "Lambda",
 			"providerPlugin": "awscloudformation",
-			"build": true
-		},
-		"getdevice": {
-			"service": "Lambda",
-			"providerPlugin": "awscloudformation",
-			"build": true
-		},
-		"thingupdate": {
 			"build": true,
-			"providerPlugin": "awscloudformation",
-			"service": "Lambda",
 			"dependsOn": [
 				{
 					"category": "api",
-					"resourceName": "coreoneappsync",
+					"resourceName": "coreoneweb",
 					"attributes": [
 						"GraphQLAPIIdOutput",
 						"GraphQLAPIEndpointOutput"
@@ -69,13 +60,27 @@
 			]
 		}
 	},
-	"iotrule": {
-		"createdevicevalue": {
+	"iotrule1": {
+		"createsensor": {
 			"providerPlugin": "awscloudformation",
 			"dependsOn": [
 				{
 					"category": "function",
-					"resourceName": "createdevicevalue",
+					"resourceName": "createsensor",
+					"attributes": [
+						"Arn"
+					]
+				}
+			]
+		}
+	},
+	"iotrule2": {
+		"updatesensor": {
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "updatesensor",
 					"attributes": [
 						"Arn"
 					]

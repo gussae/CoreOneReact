@@ -1,0 +1,16 @@
+{
+    "device_id": "sensor-1",
+    "device_type": "ph-7",
+    "timestamp": 123456789,
+    "payload": {
+        "temperature": 81,
+        "state": false,
+        "pressure": 4,
+        "flow": 5,
+        "energy": 12,
+        "uv": 24,
+        "angle": 32,
+        "longitude": 23,
+        "latitude": 45
+    }
+}
