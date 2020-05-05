@@ -1,2 +1,2 @@
-# CoreOne
+# CoreOne React
 
