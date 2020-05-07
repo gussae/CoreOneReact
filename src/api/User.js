@@ -1,7 +1,4 @@
-import Amplify, { Auth } from "aws-amplify";
-import aws_exports from "../aws-exports";
-
-Amplify.configure(aws_exports);
+import { Auth } from "aws-amplify";
 
 export const userLoginRequest = (email, password) => {
   return async (dispatch) => {
@@ -18,20 +15,20 @@ export const userLoginRequest = (email, password) => {
 export function getCurrentUserSession() {
   return async (dispatch) => {
     try {
-      const res = await Auth.currentSession()
+      const res = await Auth.currentSession();
       if (res.isValid()) {
-        const idToken = res.getIdToken()
-        dispatch({type: "GET_USER_DATA", userData: idToken.payload})
+        const idToken = res.getIdToken();
+        dispatch({ type: "GET_USER_DATA", userData: idToken.payload });
       }
     } catch (e) {
-      console.log("auth check: ", e.message)
+      console.log("auth check: ", e.message);
     }
   };
 }
 
 export function logout() {
   return async (dispatch) => {
-    await Auth.signOut()
-    dispatch({type: "USER_LOGOUT"})
-  }
+    await Auth.signOut();
+    dispatch({ type: "USER_LOGOUT" });
+  };
 }

@@ -1,6 +1,6 @@
 projects:
-  coreoneweb:
-    schemaPath: src/graphql/schema.json
+  Codegen Project:
+    schemaPath: schema.graphql
     includes:
       - src/graphql/**/*.js
     excludes:
@@ -10,6 +10,8 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
-extensions:
-  amplify:
-    version: 3
+        region: us-east-1
+        apiId: 4ynqdnksmnc5th3scrgvqkt4uy
+        frontend: javascript
+        framework: react
+        maxDepth: 2

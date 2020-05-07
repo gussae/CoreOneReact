@@ -1,9 +1,0 @@
-{
-    "permissions": {
-        "api": {
-            "coreoneappsync": [
-                "create"
-            ]
-        }
-    }
-}
