@@ -16,7 +16,7 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      subscriber: () => {}
+      subscriber: () => {},
     };
   }
   async componentDidMount() {
@@ -29,7 +29,10 @@ class Dashboard extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { sensor, SubscribeSensor } = this.props;
-    if (prevProps.sensor.currentSensor.device_id !== sensor.currentSensor.device_id) {
+    if (
+      prevProps.sensor.currentSensor.device_id !==
+      sensor.currentSensor.device_id
+    ) {
       this.state.subscriber();
       const subscriber = SubscribeSensor(sensor.currentSensor.device_id);
       this.setState({ subscriber });
@@ -91,16 +94,16 @@ class Dashboard extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return state;
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       GetSensors,
       SubscribeSensor,
-      selectSensor
+      selectSensor,
     },
     dispatch
   );
