@@ -12,7 +12,6 @@ projects:
         docsFilePath: src/graphql
         region: eu-west-1
         apiId: v7xpnlywf5ekppna77tgwdxaty
-        maxDepth: 2
 extensions:
   amplify:
     version: 3

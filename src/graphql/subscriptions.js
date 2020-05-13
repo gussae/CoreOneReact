@@ -11,13 +11,3 @@ export const onUpdateCoreOneIncomingDataValue = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateCoreOneIncomingDataValues = /* GraphQL */ `
-  subscription OnUpdateCoreOneIncomingDataValues {
-    onUpdateCoreOneIncomingDataValues {
-      device_id
-      device_type
-      payload
-      timestamp
-    }
-  }
-`;
