@@ -6,7 +6,7 @@ class LocationCard extends React.Component {
     super(props);
 
     this.state = {
-      hideMap: false
+      hideMap: false,
     };
   }
 
@@ -20,8 +20,8 @@ class LocationCard extends React.Component {
 
   render() {
     const iniCenter = {
-      lat: this.props.sensor.payload.latitude || 0,
-      lng: this.props.sensor.payload.longitude || 0
+      lat: this.props.sensor.payload.Latitude || 0,
+      lng: this.props.sensor.payload.Longitude || 0,
     };
     return (
       <div className="dashboard-card location-card" style={{ height: 500 }}>
@@ -36,5 +36,5 @@ class LocationCard extends React.Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyBITo3xw80bOFRd2vvdd94CqwR-HM99yGg"
+  apiKey: "AIzaSyBITo3xw80bOFRd2vvdd94CqwR-HM99yGg",
 })(LocationCard);

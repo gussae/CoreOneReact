@@ -1,54 +1,144 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createCoreOneInventory = /* GraphQL */ `
-  mutation CreateCoreOneInventory($input: CreateCoreOneInventoryInput!) {
-    createCoreOneInventory(input: $input) {
+export const updateCoreOne = /* GraphQL */ `
+  mutation UpdateCoreOne($device_id: String!, $input: CoreOneDeviceDataInput!) {
+    updateCoreOne(device_id: $device_id, input: $input) {
       device_id
       device_type
+      payload
+      timestamp
     }
   }
 `;
-export const updateCoreOneInventory = /* GraphQL */ `
-  mutation UpdateCoreOneInventory($input: UpdateCoreOneInventoryInput!) {
-    updateCoreOneInventory(input: $input) {
+export const createCoreOneAssigned = /* GraphQL */ `
+  mutation CreateCoreOneAssigned(
+    $input: CreateCoreOneAssignedInput!
+    $condition: ModelCoreOneAssignedConditionInput
+  ) {
+    createCoreOneAssigned(input: $input, condition: $condition) {
+      client_id
       device_id
       device_type
+      status_value
     }
   }
 `;
-export const deleteCoreOneInventory = /* GraphQL */ `
-  mutation DeleteCoreOneInventory($input: DeleteCoreOneInventoryInput!) {
-    deleteCoreOneInventory(input: $input) {
+export const updateCoreOneAssigned = /* GraphQL */ `
+  mutation UpdateCoreOneAssigned(
+    $input: UpdateCoreOneAssignedInput!
+    $condition: ModelCoreOneAssignedConditionInput
+  ) {
+    updateCoreOneAssigned(input: $input, condition: $condition) {
+      client_id
       device_id
       device_type
+      status_value
     }
   }
 `;
-export const createCoreOneDeviceData = /* GraphQL */ `
-  mutation CreateCoreOneDeviceData($input: CreateCoreOneDeviceDataInput!) {
-    createCoreOneDeviceData(input: $input) {
+export const deleteCoreOneAssigned = /* GraphQL */ `
+  mutation DeleteCoreOneAssigned(
+    $input: DeleteCoreOneAssignedInput!
+    $condition: ModelCoreOneAssignedConditionInput
+  ) {
+    deleteCoreOneAssigned(input: $input, condition: $condition) {
+      client_id
       device_id
-      timestamp
-      payload
+      device_type
+      status_value
     }
   }
 `;
-export const updateCoreOneDeviceData = /* GraphQL */ `
-  mutation UpdateCoreOneDeviceData($input: UpdateCoreOneDeviceDataInput!) {
-    updateCoreOneDeviceData(input: $input) {
+export const createCoreOneIncomingData = /* GraphQL */ `
+  mutation CreateCoreOneIncomingData(
+    $device_id: String!
+    $timestamp: AWSTimestamp!
+    $payload: AWSJSON!
+    $device_type: String!
+  ) {
+    createCoreOneIncomingData(
+      device_id: $device_id
+      timestamp: $timestamp
+      payload: $payload
+      device_type: $device_type
+    ) {
       device_id
-      timestamp
+      device_type
       payload
+      timestamp
     }
   }
 `;
-export const deleteCoreOneDeviceData = /* GraphQL */ `
-  mutation DeleteCoreOneDeviceData($input: DeleteCoreOneDeviceDataInput!) {
-    deleteCoreOneDeviceData(input: $input) {
+export const updateCoreOneIncomingData = /* GraphQL */ `
+  mutation UpdateCoreOneIncomingData(
+    $input: UpdateCoreOneIncomingDataInput!
+    $condition: ModelCoreOneIncomingDataConditionInput
+  ) {
+    updateCoreOneIncomingData(input: $input, condition: $condition) {
       device_id
-      timestamp
+      device_type
       payload
+      timestamp
+    }
+  }
+`;
+export const deleteCoreOneIncomingData = /* GraphQL */ `
+  mutation DeleteCoreOneIncomingData(
+    $input: DeleteCoreOneIncomingDataInput!
+    $condition: ModelCoreOneIncomingDataConditionInput
+  ) {
+    deleteCoreOneIncomingData(input: $input, condition: $condition) {
+      device_id
+      device_type
+      payload
+      timestamp
+    }
+  }
+`;
+export const createCoreOneOutgoingData = /* GraphQL */ `
+  mutation CreateCoreOneOutgoingData(
+    $device_id: String!
+    $timestamp: AWSTimestamp!
+    $payload: AWSJSON!
+    $device_type: String!
+  ) {
+    createCoreOneOutgoingData(
+      device_id: $device_id
+      timestamp: $timestamp
+      payload: $payload
+      device_type: $device_type
+    ) {
+      device_id
+      device_type
+      payload
+      timestamp
+    }
+  }
+`;
+export const updateCoreOneOutgoingData = /* GraphQL */ `
+  mutation UpdateCoreOneOutgoingData(
+    $input: UpdateCoreOneOutgoingDataInput!
+    $condition: ModelCoreOneOutgoingDataConditionInput
+  ) {
+    updateCoreOneOutgoingData(input: $input, condition: $condition) {
+      device_id
+      device_type
+      payload
+      timestamp
+    }
+  }
+`;
+export const deleteCoreOneOutgoingData = /* GraphQL */ `
+  mutation DeleteCoreOneOutgoingData(
+    $input: DeleteCoreOneOutgoingDataInput!
+    $condition: ModelCoreOneOutgoingDataConditionInput
+  ) {
+    deleteCoreOneOutgoingData(input: $input, condition: $condition) {
+      device_id
+      device_type
+      payload
+      timestamp
     }
   }
 `;

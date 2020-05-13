@@ -1,21 +1,74 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getCoreOneInventory = /* GraphQL */ `
-  query GetCoreOneInventory($device_id: String!, $device_type: String!) {
-    getCoreOneInventory(device_id: $device_id, device_type: $device_type) {
+export const getCoreOneLatestData = /* GraphQL */ `
+  query GetCoreOneLatestData($device_id: String!) {
+    getCoreOneLatestData(device_id: $device_id) {
       device_id
       device_type
+      payload
+      timestamp
     }
   }
 `;
-export const listCoreOneInventories = /* GraphQL */ `
-  query ListCoreOneInventories(
-    $filter: TableCoreOneInventoryFilterInput
+export const listCoreOne = /* GraphQL */ `
+  query ListCoreOne($client_id: String!) {
+    listCoreOne(client_id: $client_id) {
+      client_id
+      device_id
+      device_type
+      status_value
+    }
+  }
+`;
+export const getCoreOneAssigned = /* GraphQL */ `
+  query GetCoreOneAssigned($id: ID!) {
+    getCoreOneAssigned(id: $id) {
+      client_id
+      device_id
+      device_type
+      status_value
+    }
+  }
+`;
+export const listCoreOneAssigneds = /* GraphQL */ `
+  query ListCoreOneAssigneds(
+    $filter: ModelCoreOneAssignedFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listCoreOneInventories(
+    listCoreOneAssigneds(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        client_id
+        device_id
+        device_type
+        status_value
+      }
+      nextToken
+    }
+  }
+`;
+export const getCoreOneIncomingData = /* GraphQL */ `
+  query GetCoreOneIncomingData($id: ID!) {
+    getCoreOneIncomingData(id: $id) {
+      device_id
+      device_type
+      payload
+      timestamp
+    }
+  }
+`;
+export const listCoreOneIncomingDatas = /* GraphQL */ `
+  query ListCoreOneIncomingDatas(
+    $filter: ModelCoreOneIncomingDataFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCoreOneIncomingDatas(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -23,35 +76,39 @@ export const listCoreOneInventories = /* GraphQL */ `
       items {
         device_id
         device_type
+        payload
+        timestamp
       }
       nextToken
     }
   }
 `;
-export const getCoreOneDeviceData = /* GraphQL */ `
-  query GetCoreOneDeviceData($device_id: String!, $timestamp: String!) {
-    getCoreOneDeviceData(device_id: $device_id, timestamp: $timestamp) {
+export const getCoreOneOutgoingData = /* GraphQL */ `
+  query GetCoreOneOutgoingData($id: ID!) {
+    getCoreOneOutgoingData(id: $id) {
       device_id
-      timestamp
+      device_type
       payload
+      timestamp
     }
   }
 `;
-export const listCoreOneDeviceData = /* GraphQL */ `
-  query ListCoreOneDeviceData(
-    $filter: TableCoreOneDeviceDataFilterInput
+export const listCoreOneOutgoingDatas = /* GraphQL */ `
+  query ListCoreOneOutgoingDatas(
+    $filter: ModelCoreOneOutgoingDataFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listCoreOneDeviceData(
+    listCoreOneOutgoingDatas(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
     ) {
       items {
         device_id
-        timestamp
+        device_type
         payload
+        timestamp
       }
       nextToken
     }

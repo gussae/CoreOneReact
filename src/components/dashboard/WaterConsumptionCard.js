@@ -7,16 +7,22 @@ class WaterConsumptionCard extends React.Component {
 
     this.state = {
       xAxisData: [],
-      data: []
+      data: [],
     };
   }
 
   componentDidUpdate(prevProps) {
     const { xAxisData, data } = this.state;
     const { sensor } = this.props;
-    if (prevProps.sensor.payload.flow !== sensor.payload.flow) {
-      xAxisData.push(xAxisData.length);
-      data.push(sensor.payload.flow);
+    if (prevProps.sensor.payload.Flow !== sensor.payload.Flow) {
+      xAxisData.push(
+        xAxisData.length === 0 ? 0 : xAxisData[xAxisData.length - 1] + 1
+      );
+      data.push(sensor.payload.Flow);
+      if (xAxisData.length > 50) {
+        xAxisData.shift();
+        data.shift();
+      }
       this.setState({ xAxisData, data });
     }
     if (prevProps.sensor.device_id !== sensor.device_id) {
@@ -31,19 +37,19 @@ class WaterConsumptionCard extends React.Component {
         left: 30,
         top: 30,
         right: 15,
-        bottom: 30
+        bottom: 30,
       },
       tooltip: {},
       xAxis: {
         data: xAxisData,
         silent: false,
         splitLine: {
-          show: false
-        }
+          show: false,
+        },
       },
       yAxis: {
         show: false,
-        splitLine: { show: false }
+        splitLine: { show: false },
       },
       series: [
         {
@@ -51,15 +57,15 @@ class WaterConsumptionCard extends React.Component {
           name: "bar",
           type: "bar",
           data: data,
-          animationDelay: function(idx) {
+          animationDelay: function (idx) {
             return idx * 10;
-          }
-        }
+          },
+        },
       ],
       animationEasing: "elasticOut",
-      animationDelayUpdate: function(idx) {
+      animationDelayUpdate: function (idx) {
         return idx * 5;
-      }
+      },
     };
     return (
       <div className="dashboard-card" style={{ height: 500 }}>
@@ -67,7 +73,7 @@ class WaterConsumptionCard extends React.Component {
 
         <div className="dashboard-card__body text-center">
           <span className="dashboard-card__value color-blue">
-            {this.props.sensor.payload.flow}
+            {this.props.sensor.payload.Flow}
           </span>
           <br />
           <span className="secondary">Litre/Hour</span>

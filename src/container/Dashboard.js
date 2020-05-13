@@ -19,6 +19,7 @@ class Dashboard extends React.Component {
       subscriber: () => {},
     };
   }
+
   async componentDidMount() {
     const { GetSensors } = this.props;
     const sensors = await GetSensors();
@@ -27,21 +28,29 @@ class Dashboard extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  finishSubscriber() {
+    this.state.subscriber();
+  }
+
+  startSubscriber() {
     const { sensor, SubscribeSensor } = this.props;
+    const subscriber = SubscribeSensor(sensor.currentSensor.device_id);
+    this.setState({ subscriber });
+  }
+
+  componentDidUpdate(prevProps) {
     if (
       prevProps.sensor.currentSensor.device_id !==
-      sensor.currentSensor.device_id
+      this.props.sensor.currentSensor.device_id
     ) {
-      this.state.subscriber();
-      const subscriber = SubscribeSensor(sensor.currentSensor.device_id);
-      this.setState({ subscriber });
+      this.finishSubscriber();
+      this.startSubscriber();
     }
   }
 
   componentWillUnmount() {
     // finish subscribe
-    this.state.subscriber();
+    this.finishSubscriber();
   }
 
   render() {
@@ -57,7 +66,11 @@ class Dashboard extends React.Component {
             </div>
             <div className="row">
               <div className="col-4">
-                <TemperatureCard sensor={currentSensor} />
+                <TemperatureCard
+                  sensor={currentSensor}
+                  startSubscriber={this.startSubscriber.bind(this)}
+                  finishSubscriber={this.finishSubscriber.bind(this)}
+                />
               </div>
               <div className="col-8">
                 <Scheduler sensor={currentSensor} />

@@ -1,0 +1,20 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-coreonereact-dev-00431-authRole",
+            "UnauthRoleArn": "arn:aws:iam::461698816427:role/amplify-coreonereact-dev-00431-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::461698816427:role/amplify-coreonereact-dev-00431-authRole",
+            "Region": "eu-west-1",
+            "DeploymentBucketName": "amplify-coreonereact-dev-00431-deployment",
+            "UnauthRoleName": "amplify-coreonereact-dev-00431-unauthRole",
+            "StackName": "amplify-coreonereact-dev-00431",
+            "StackId": "arn:aws:cloudformation:eu-west-1:461698816427:stack/amplify-coreonereact-dev-00431/28f50470-9334-11ea-a515-02078729aa3e",
+            "AmplifyAppId": "d1utac224fi5we"
+        },
+        "categories": {
+            "auth": {
+                "coreonereactb33d09ec": {}
+            }
+        }
+    }
+}

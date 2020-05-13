@@ -73,19 +73,18 @@ button[disabled] {
 }
 
 .profile {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-	.device-list {
-		cursor: pointer;
-		display: flex;
+  .device-list {
+    cursor: pointer;
+    display: flex;
 
-		div {
-			padding-top: 4px;
-		}
-
-	}
+    div {
+      padding-top: 4px;
+    }
+  }
   .name {
     font-size: 16px;
     max-width: 70%;
@@ -93,10 +92,9 @@ button[disabled] {
     display: flex;
     white-space: nowrap;
     text-overflow: ellipsis;
-		margin-left: 20%;
-		div {
-			padding-top: 4px;
-		}
+    div {
+      padding-top: 4px;
+    }
   }
 }
 

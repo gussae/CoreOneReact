@@ -5,15 +5,26 @@ class Header extends React.Component {
     return (
       <div
         className="main-header"
-        style={this.props.shadow === false ? { boxShadow: "none" } : {}}
+        style={
+          this.props.shadow === false
+            ? {
+                boxShadow: "none",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }
+            : {
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }
+        }
       >
-        <div style={{ width: "30%" }}>{this.props.left}</div>
-        <div style={{ width: "40%" }} className="text-center">
+        <div>{this.props.left}</div>
+        <div className="text-center" style={{ flexGrow: 1 }}>
           {this.props.middle}
         </div>
-        <div style={{ width: "30%" }} className="text-right">
-          {this.props.right}
-        </div>
+        <div className="text-right">{this.props.right}</div>
       </div>
     );
   }

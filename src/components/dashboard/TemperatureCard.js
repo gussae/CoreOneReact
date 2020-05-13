@@ -1,10 +1,12 @@
 import React from "react";
 import Slider from "rc-slider";
+import { debounce } from "lodash";
+import { createCoreOneOutgoing } from "../../api/Sensors";
 import "rc-slider/assets/index.css";
 
 const marks = {
   65: <strong className="slider-mark mark-top">65&nbsp;°</strong>,
-  5: <strong className="slider-mark mark-bottom">5&nbsp;°</strong>
+  5: <strong className="slider-mark mark-bottom">5&nbsp;°</strong>,
 };
 
 class TemperatureCard extends React.Component {
@@ -18,52 +20,37 @@ class TemperatureCard extends React.Component {
       displayedTemp: 5,
       originalTemp: 5,
       color: "",
-      blinking: false
+      blinking: false,
+      isChanging: false,
     };
   }
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.sensor.payload.temperature !==
-      this.props.sensor.payload.temperature
+      prevProps.sensor.payload.CurrentTemp !==
+        this.props.sensor.payload.CurrentTemp &&
+      !this.state.isChanging
     ) {
-      const temp = this.props.sensor.payload.temperature;
+      const temp = this.props.sensor.payload.CurrentTemp;
       clearTimeout(this.changeTimer2);
 
       this.setState({
         displayedTemp: temp,
         originalTemp: temp,
         color: this.getValueColor(temp),
-        blinking: false
+        blinking: false,
       });
     }
   }
 
-  onSetTemperatureChange = value => {
-    const { originalTemp } = this.state;
+  onSetTemperatureChange = (value) => {
     this.setState({
       displayedTemp: value,
-      color: this.getValueColor(value)
+      color: this.getValueColor(value),
     });
-
-    // start blinking only after value changing STOP + 300 ms delay
-    clearTimeout(this.changeTimer);
-    this.changeTimer = setTimeout(() => {
-      this.setState({ blinking: true });
-    }, 300);
-
-    // start timer to reset value only after value changing STOP + 3 seconds delay
-    clearTimeout(this.changeTimer2);
-    this.changeTimer2 = setTimeout(() => {
-      this.setState({
-        blinking: false,
-        displayedTemp: originalTemp,
-        color: this.getValueColor(originalTemp)
-      });
-    }, 3000);
   };
 
-  getValueColor = value => {
+  getValueColor = (value) => {
     let color = "#eb5e54";
     if (value >= 5 && value <= 20) {
       color = "#4f82e9";
@@ -85,8 +72,9 @@ class TemperatureCard extends React.Component {
 
         <div className="dashboard-card__body">
           <span
-            className={`dashboard-card__value set-value ${this.state.blinking &&
-              "text-blink"}`}
+            className={`dashboard-card__value set-value ${
+              this.state.blinking && "text-blink"
+            }`}
             style={{ color: this.state.color, marginRight: -35 }}
           >
             {this.state.displayedTemp}
@@ -102,7 +90,41 @@ class TemperatureCard extends React.Component {
             max={65}
             step={1}
             vertical
-            onChange={this.onSetTemperatureChange}
+            onBeforeChange={() => {
+              this.setState({ isChanging: true });
+              // this.props.finishSubscriber();
+            }}
+            onAfterChange={(value) => {
+              const { originalTemp } = this.state;
+              // this.props.startSubscriber();
+
+              createCoreOneOutgoing({
+                device_id: this.props.sensor.device_id,
+                timestamp: new Date().getTime(),
+                payload: JSON.stringify({
+                  temperature: value,
+                }),
+                device_type: this.props.sensor.device_type,
+              });
+
+              // start blinking only after value changing STOP + 300 ms delay
+              clearTimeout(this.changeTimer);
+              this.changeTimer = setTimeout(() => {
+                this.setState({ blinking: true });
+              }, 300);
+
+              // start timer to reset value only after value changing STOP + 3 seconds delay
+              clearTimeout(this.changeTimer2);
+              this.changeTimer2 = setTimeout(() => {
+                this.setState({
+                  blinking: false,
+                  displayedTemp: originalTemp,
+                  color: this.getValueColor(originalTemp),
+                });
+                this.setState({ isChanging: false });
+              }, 3000);
+            }}
+            onChange={debounce(this.onSetTemperatureChange, 10)}
             marks={marks}
             dotStyle={{ display: "none" }}
             handleStyle={{
@@ -110,7 +132,7 @@ class TemperatureCard extends React.Component {
               border: "1px solid #eee",
               boxShadow: "none",
               width: 15,
-              height: 15
+              height: 15,
             }}
           />
         </div>

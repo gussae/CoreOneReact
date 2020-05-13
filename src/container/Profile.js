@@ -12,11 +12,11 @@ class Profile extends React.Component {
     super(props);
     this.state = {
       anchorEl: null,
-      anchorElDevices: null
+      anchorElDevices: null,
     };
   }
 
-  toggleMenu = event => {
+  toggleMenu = (event) => {
     if (event !== false) {
       this.setState({ anchorEl: event.currentTarget });
     } else {
@@ -24,7 +24,7 @@ class Profile extends React.Component {
     }
   };
 
-  toggleDevicesList = event => {
+  toggleDevicesList = (event) => {
     if (event !== false) {
       this.setState({ anchorElDevices: event.currentTarget });
     } else {
@@ -32,14 +32,14 @@ class Profile extends React.Component {
     }
   };
 
-  selectDevice = sensor => {
+  selectDevice = (sensor) => {
     this.toggleDevicesList(false);
     this.props.selectSensor(sensor);
   };
 
   render() {
     const { user, sensor } = this.props;
-    const listItems = sensor.sensors.map(device => (
+    const listItems = sensor.sensors.map((device) => (
       <MenuItem
         onClick={() => this.selectDevice(device)}
         key={device.device_id}
@@ -56,16 +56,18 @@ class Profile extends React.Component {
     return (
       <span className="profile">
         <span onClick={this.toggleDevicesList} className="device-list mr-4">
-          Device: {sensor.currentSensor.device_id}{" "}
+          <span
+            style={{
+              overflow: "hidden",
+              textOverflow: "ellipse",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Device: {sensor.currentSensor.device_id}{" "}
+          </span>
           <div>
             <MaterialIcon size={20} icon="arrow_drop_down" />
           </div>
-        </span>
-        <span style={{ marginRight: 10, verticalAlign: 10 }}>
-          <MaterialIcon size={20} icon="signal_cellular_4_bar" />
-        </span>
-        <span style={{ verticalAlign: 10 }}>
-          <MaterialIcon size={20} icon="signal_wifi_4_bar" />
         </span>
 
         <Menu
@@ -107,11 +109,11 @@ function mapStateToProps(state) {
   return state;
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       logout,
-      selectSensor
+      selectSensor,
     },
     dispatch
   );

@@ -1,18 +1,10 @@
 import { API, graphqlOperation } from "aws-amplify";
 import {
-  listCoreOneDeviceData,
-  listCoreOneInventories,
+  listCoreOneIncomingDatas,
+  listCoreOneAssigneds,
 } from "../graphql/queries";
-import { onUpdateCoreOneInventory } from "../graphql/subscriptions";
-
-const parseToJson = (val) => {
-  const values = val.substring(1, val.length - 1);
-  const obj = {};
-  values.split(", ").forEach((item) => {
-    obj[item.split("=")[0]] = item.split("=")[1];
-  });
-  return obj;
-};
+import { createCoreOneOutgoingData } from "../graphql/mutations";
+import { onUpdateCoreOneIncomingDataValue } from "../graphql/subscriptions";
 
 export const GetSensorStatusColor = (status) => {
   let r = "";
@@ -25,6 +17,17 @@ export const GetSensorStatusColor = (status) => {
   return r;
 };
 
+export const createCoreOneOutgoing = async (value) => {
+  try {
+    const res = await API.graphql(
+      graphqlOperation(createCoreOneOutgoingData, value)
+    );
+    console.log("created outgoing data: ", res);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const selectSensor = (sensor) => {
   return (dispatch) => {
     dispatch({ type: "UPDATE_SENSOR", currentSensor: sensor });
@@ -35,23 +38,27 @@ export const GetSensors = () => {
   return async (dispatch, getState) => {
     try {
       // get devices id list
-      const resCDs = await API.graphql(
-        graphqlOperation(listCoreOneInventories)
-      );
-      const cds = resCDs.data.listCoreOneInventories.items;
+      const resCDs = await API.graphql(graphqlOperation(listCoreOneAssigneds));
+      const cds = resCDs.data.listCoreOneAssigneds.items;
 
       // get my devices list
       const resSensors = await API.graphql(
-        graphqlOperation(listCoreOneDeviceData)
+        graphqlOperation(listCoreOneIncomingDatas)
       );
-      let sensors = resSensors.data.listCoreOneDeviceData.items;
+      let sensors = resSensors.data.listCoreOneIncomingDatas.items;
 
       let mysensors = [];
 
+      console.log("My user:", getState().user.userData.sub);
+      // 5f7ab832-c5ad-46a2-b406-727f393ec490
+
       for (let cd of cds) {
         for (let sensor of sensors) {
-          if (cd.device_id === sensor.device_id) {
-            sensor.payload = parseToJson(sensor.payload);
+          if (
+            cd.device_id === sensor.device_id
+            // && cd.client_id === getState().user.userData.sub
+          ) {
+            sensor.payload = JSON.parse(sensor.payload);
             mysensors.push(sensor);
             break;
           }
@@ -70,11 +77,14 @@ export const GetSensors = () => {
 export const SubscribeSensor = (device_id) => {
   return (dispatch) => {
     const subscriber = API.graphql(
-      graphqlOperation(onUpdateCoreOneInventory, { device_id: device_id })
+      graphqlOperation(onUpdateCoreOneIncomingDataValue, {
+        device_id: device_id,
+      })
     ).subscribe({
       next: (response) => {
-        const sensor = response.value.data.onUpdateSensor;
-        if (sensor.device_id === device_id) {
+        const sensor = response.value.data.onUpdateCoreOneIncomingDataValue;
+        if (sensor && sensor.device_id === device_id) {
+          sensor.payload = JSON.parse(sensor.payload);
           sensor.payload = JSON.parse(sensor.payload);
           dispatch({
             type: "UPDATE_SENSOR",

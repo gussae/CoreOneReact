@@ -8,16 +8,22 @@ class EnergyConsumptionCard extends React.Component {
 
     this.state = {
       xAxisData: [],
-      data: []
+      data: [],
     };
   }
 
   componentDidUpdate(prevProps) {
     const { xAxisData, data } = this.state;
     const { sensor } = this.props;
-    if (prevProps.sensor.payload.energy !== sensor.payload.energy) {
-      xAxisData.push(xAxisData.length);
-      data.push(sensor.payload.energy);
+    if (prevProps.sensor.payload.Energy !== sensor.payload.Energy) {
+      xAxisData.push(
+        xAxisData.length === 0 ? 0 : xAxisData[xAxisData.length - 1] + 1
+      );
+      data.push(sensor.payload.Energy);
+      if (xAxisData.length > 50) {
+        xAxisData.shift();
+        data.shift();
+      }
       this.setState({ xAxisData, data });
     }
     if (prevProps.sensor.device_id !== sensor.device_id) {
@@ -32,19 +38,19 @@ class EnergyConsumptionCard extends React.Component {
         left: 30,
         top: 30,
         right: 15,
-        bottom: 30
+        bottom: 30,
       },
       tooltip: {},
       xAxis: {
         data: xAxisData,
         silent: false,
         splitLine: {
-          show: false
-        }
+          show: false,
+        },
       },
       yAxis: {
         show: false,
-        splitLine: { show: false }
+        splitLine: { show: false },
       },
       series: [
         {
@@ -52,15 +58,15 @@ class EnergyConsumptionCard extends React.Component {
           name: "bar",
           type: "bar",
           data: data,
-          animationDelay: function(idx) {
+          animationDelay: function (idx) {
             return idx * 10;
-          }
-        }
+          },
+        },
       ],
       animationEasing: "elasticOut",
-      animationDelayUpdate: function(idx) {
+      animationDelayUpdate: function (idx) {
         return idx * 5;
-      }
+      },
     };
 
     return (
@@ -69,7 +75,7 @@ class EnergyConsumptionCard extends React.Component {
 
         <div className="dashboard-card__body text-center">
           <span className="dashboard-card__value color-main">
-            {this.props.sensor.payload.energy}
+            {this.props.sensor.payload.Energy}
           </span>
           <br />
           <span className="secondary">kW/Hour</span>

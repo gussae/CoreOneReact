@@ -8,7 +8,7 @@ class SurfaceAngleCard extends React.Component {
 
         <div className="dashboard-card__body text-center pb-3">
           <span className="dashboard-card__value">
-            {this.props.sensor.payload.uv}
+            {this.props.sensor.payload.UV}
           </span>
           <br />
           <span className="secondary">Degrees</span>
