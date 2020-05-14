@@ -19,10 +19,10 @@ class WaterConsumptionCard extends React.Component {
         xAxisData.length === 0 ? 0 : xAxisData[xAxisData.length - 1] + 1
       );
       data.push(sensor.payload.Flow);
-      if (xAxisData.length > 50) {
-        xAxisData.shift();
-        data.shift();
-      }
+      // if (xAxisData.length > 50) {
+      //   xAxisData.shift();
+      //   data.shift();
+      // }
       this.setState({ xAxisData, data });
     }
     if (prevProps.sensor.device_id !== sensor.device_id) {
@@ -39,7 +39,9 @@ class WaterConsumptionCard extends React.Component {
         right: 15,
         bottom: 30,
       },
-      tooltip: {},
+      tooltips: {
+        enabled: false,
+      },
       xAxis: {
         data: xAxisData,
         silent: false,
@@ -60,6 +62,7 @@ class WaterConsumptionCard extends React.Component {
           animationDelay: function (idx) {
             return idx * 10;
           },
+          silent: true,
         },
       ],
       animationEasing: "elasticOut",
