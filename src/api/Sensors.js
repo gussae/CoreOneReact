@@ -50,13 +50,12 @@ export const GetSensors = () => {
       let mysensors = [];
 
       console.log("My user:", getState().user.userData.sub);
-      // 5f7ab832-c5ad-46a2-b406-727f393ec490
 
       for (let cd of cds) {
         for (let sensor of sensors) {
           if (
-            cd.device_id === sensor.device_id
-            // && cd.client_id === getState().user.userData.sub
+            cd.device_id === sensor.device_id &&
+            cd.client_id === getState().user.userData.sub
           ) {
             sensor.payload = JSON.parse(sensor.payload);
             mysensors.push(sensor);
