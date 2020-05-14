@@ -39,10 +39,10 @@ class Profile extends React.Component {
 
   render() {
     const { user, sensor } = this.props;
-    const listItems = sensor.sensors.map((device) => (
+    const listItems = sensor.sensors.map((device, index) => (
       <MenuItem
         onClick={() => this.selectDevice(device)}
-        key={device.device_id}
+        key={`menu__${index}`}
       >
         {sensor.currentSensor.device_id === device.device_id ? (
           <span>Current:</span>
