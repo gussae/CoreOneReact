@@ -30,7 +30,7 @@ export const createCoreOneOutgoing = async (value) => {
 
 export const selectSensor = (sensor) => {
   return (dispatch) => {
-    dispatch({ type: "UPDATE_SENSOR", currentSensor: sensor });
+    dispatch({ type: "SELECT_SENSOR", currentSensor: sensor });
   };
 };
 
@@ -49,23 +49,26 @@ export const GetSensors = () => {
 
       let mysensors = [];
 
-      console.log("My user:", getState().user.userData.sub);
-
       for (let cd of cds) {
-        for (let sensor of sensors) {
-          if (
-            cd.device_id === sensor.device_id &&
-            cd.client_id === getState().user.userData.sub
-          ) {
-            sensor.payload = JSON.parse(sensor.payload);
-            mysensors.push(sensor);
-            break;
+        if (cd.client_id === getState().user.userData.sub) {
+          let data = [];
+          for (let sensor of sensors) {
+            if (cd.device_id === sensor.device_id) {
+              data.push({
+                timestamp: sensor.timestamp,
+                payload: JSON.parse(sensor.payload),
+              });
+            }
           }
+          mysensors.push({
+            device_id: cd.device_id,
+            device_type: cd.device_type,
+            data: data,
+          });
         }
       }
 
       dispatch({ type: "GET_SENSORS_LIST", getSensorsList: mysensors });
-      console.log("sensors---", mysensors);
       return mysensors;
     } catch (error) {
       console.log(error);
@@ -81,6 +84,7 @@ export const SubscribeSensor = (device_id) => {
       })
     ).subscribe({
       next: (response) => {
+        console.log("response", response);
         const sensor = response.value.data.onUpdateCoreOneIncomingDataValue;
         if (sensor && sensor.device_id === device_id) {
           sensor.payload = JSON.parse(sensor.payload);

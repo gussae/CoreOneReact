@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import MaterialIcon from "material-icons-react";
 import { logout } from "../api/User";
-import { selectSensor } from "../api/Sensors";
+import { selectSensor, GetSensors } from "../api/Sensors";
 
 class Profile extends React.Component {
   constructor(props) {
@@ -32,16 +32,18 @@ class Profile extends React.Component {
     }
   };
 
-  selectDevice = (sensor) => {
+  selectDevice = (device_id) => {
     this.toggleDevicesList(false);
-    this.props.selectSensor(sensor);
+    this.props.GetSensors().then((sensors) => {
+      this.props.selectSensor(sensors.find((d) => d.device_id === device_id));
+    });
   };
 
   render() {
     const { user, sensor } = this.props;
     const listItems = sensor.sensors.map((device, index) => (
       <MenuItem
-        onClick={() => this.selectDevice(device)}
+        onClick={() => this.selectDevice(device.device_id)}
         key={`menu__${index}`}
       >
         {sensor.currentSensor.device_id === device.device_id ? (
@@ -83,8 +85,8 @@ class Profile extends React.Component {
           {user.userData.name}
           <span onClick={this.toggleMenu} className="avatar">
             {user.userData.name
-              ? user.userData.name[0].toUpperCase() +
-                user.userData.preferred_username[0].toUpperCase()
+              ? user.userData.family_name[0].toUpperCase() +
+                user.userData.name[0].toUpperCase()
               : "?"}
           </span>
           <div>
@@ -113,6 +115,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       logout,
+      GetSensors,
       selectSensor,
     },
     dispatch

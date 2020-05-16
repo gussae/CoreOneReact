@@ -8,7 +8,9 @@ class SunlightCard extends React.Component {
 
         <div className="dashboard-card__body text-center pb-3">
           <span className="dashboard-card__value color-yellow">
-            {this.props.sensor.payload.Angle}
+            {this.props.sensor.payload.Angle
+              ? this.props.sensor.payload.Angle
+              : "--"}
           </span>
           <br />
           <span className="secondary">&nbsp;</span>

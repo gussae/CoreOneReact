@@ -17,9 +17,8 @@ class TemperatureCard extends React.Component {
     super(props);
 
     this.state = {
-      displayedTemp: 5,
-      originalTemp: 5,
-      color: "",
+      displayedTemp: "--",
+      originalTemp: "--",
       blinking: false,
       isChanging: false,
     };
@@ -37,7 +36,6 @@ class TemperatureCard extends React.Component {
       this.setState({
         displayedTemp: temp,
         originalTemp: temp,
-        color: this.getValueColor(temp),
         blinking: false,
       });
     }
@@ -46,7 +44,6 @@ class TemperatureCard extends React.Component {
   onSetTemperatureChange = (value) => {
     this.setState({
       displayedTemp: value,
-      color: this.getValueColor(value),
     });
   };
 
@@ -75,7 +72,10 @@ class TemperatureCard extends React.Component {
             className={`dashboard-card__value set-value ${
               this.state.blinking && "text-blink"
             }`}
-            style={{ color: this.state.color, marginRight: -35 }}
+            style={{
+              color: this.getValueColor(this.state.displayedTemp),
+              marginRight: -35,
+            }}
           >
             {this.state.displayedTemp}
             {"°"}
@@ -119,9 +119,8 @@ class TemperatureCard extends React.Component {
                 this.setState({
                   blinking: false,
                   displayedTemp: originalTemp,
-                  color: this.getValueColor(originalTemp),
+                  isChanging: false,
                 });
-                this.setState({ isChanging: false });
               }, 3000);
             }}
             onChange={debounce(this.onSetTemperatureChange, 10)}

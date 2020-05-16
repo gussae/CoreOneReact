@@ -61,16 +61,13 @@ class Dashboard extends React.Component {
           <div className="dashboard-content">
             <div className="row header-center-text">
               <h4>
-                {currentSensor.device_id} : {currentSensor.device_type}
+                {currentSensor.device_id || "--"} :{" "}
+                {currentSensor.device_type || "--"}
               </h4>
             </div>
             <div className="row">
               <div className="col-4">
-                <TemperatureCard
-                  sensor={currentSensor}
-                  startSubscriber={this.startSubscriber.bind(this)}
-                  finishSubscriber={this.finishSubscriber.bind(this)}
-                />
+                <TemperatureCard sensor={currentSensor} />
               </div>
               <div className="col-8">
                 <Scheduler sensor={currentSensor} />

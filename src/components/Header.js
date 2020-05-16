@@ -21,10 +21,32 @@ class Header extends React.Component {
         }
       >
         <div>{this.props.left}</div>
-        <div className="text-center" style={{ flexGrow: 1 }}>
-          {this.props.middle}
+        <div
+          className="text-center"
+          style={{ flexGrow: 1, position: "relative" }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              width: "100vw",
+              textAlign: "center",
+              zIndex: 1,
+            }}
+          >
+            {this.props.middle}
+          </div>
         </div>
-        <div className="text-right">{this.props.right}</div>
+        <div
+          className="text-right"
+          style={{
+            zIndex: 2,
+          }}
+        >
+          {this.props.right}
+        </div>
       </div>
     );
   }
