@@ -27,7 +27,7 @@ class WaterConsumptionCard extends React.Component {
     }
   };
 
-  arrAvg = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length;
+  arrSum = (arr) => arr.reduce((a, b) => a + b, 0);
 
   createReport() {
     const { sensor } = this.props;
@@ -58,7 +58,7 @@ class WaterConsumptionCard extends React.Component {
       } else if (group.length === 1) {
         res = group[0].payload.Energy;
       } else {
-        res = this.arrAvg(group.map((item) => item.payload.Energy));
+        res = this.arrSum(group.map((item) => item.payload.Energy));
       }
       result = [res, ...result];
       label = [moment(current).format("h a"), ...label];
@@ -93,7 +93,7 @@ class WaterConsumptionCard extends React.Component {
       } else if (group.length === 1) {
         res = group[0].payload.Energy;
       } else {
-        res = this.arrAvg(group.map((item) => item.payload.Energy));
+        res = this.arrSum(group.map((item) => item.payload.Energy));
       }
       result = [res, ...result];
       label = [moment(current).format("ddd"), ...label];
@@ -128,7 +128,7 @@ class WaterConsumptionCard extends React.Component {
       } else if (group.length === 1) {
         res = group[0].payload.Energy;
       } else {
-        res = this.arrAvg(group.map((item) => item.payload.Energy));
+        res = this.arrSum(group.map((item) => item.payload.Energy));
       }
       result = [res, ...result];
       label = [moment(current).format("MMM"), ...label];
@@ -163,7 +163,7 @@ class WaterConsumptionCard extends React.Component {
       } else if (group.length === 1) {
         res = group[0].payload.Energy;
       } else {
-        res = this.arrAvg(group.map((item) => item.payload.Energy));
+        res = this.arrSum(group.map((item) => item.payload.Energy));
       }
       result = [res, ...result];
       label = [moment(current).format("YYYY"), ...label];
@@ -223,12 +223,11 @@ class WaterConsumptionCard extends React.Component {
       } else if (group.length === 1) {
         res = group[0].payload.Energy;
       } else {
-        res = this.arrAvg(group.map((item) => item.payload.Energy));
+        res = this.arrSum(group.map((item) => item.payload.Energy));
       }
       if (this.state.lastData[0].timestamp === current) {
         result[23] =
-          (result[23] * this.state.lastData[0].count + res * group.length) /
-          (this.state.lastData[0].count + group.length);
+          result[23] * this.state.lastData[0].count + res * group.length;
         break;
       } else {
         newResults = [res, ...newResults];
@@ -272,12 +271,11 @@ class WaterConsumptionCard extends React.Component {
       } else if (group.length === 1) {
         res = group[0].payload.Energy;
       } else {
-        res = this.arrAvg(group.map((item) => item.payload.Energy));
+        res = this.arrSum(group.map((item) => item.payload.Energy));
       }
       if (this.state.lastData[1].timestamp === current) {
         result[6] =
-          (result[6] * this.state.lastData[1].count + res * group.length) /
-          (this.state.lastData[1].count + group.length);
+          result[6] * this.state.lastData[1].count + res * group.length;
         break;
       } else {
         newResults = [res, ...newResults];
@@ -321,12 +319,11 @@ class WaterConsumptionCard extends React.Component {
       } else if (group.length === 1) {
         res = group[0].payload.Energy;
       } else {
-        res = this.arrAvg(group.map((item) => item.payload.Energy));
+        res = this.arrSum(group.map((item) => item.payload.Energy));
       }
       if (this.state.lastData[2].timestamp === current) {
         result[11] =
-          (result[11] * this.state.lastData[2].count + res * group.length) /
-          (this.state.lastData[2].count + group.length);
+          result[11] * this.state.lastData[2].count + res * group.length;
         break;
       } else {
         newResults = [res, ...newResults];
@@ -370,12 +367,11 @@ class WaterConsumptionCard extends React.Component {
       } else if (group.length === 1) {
         res = group[0].payload.Energy;
       } else {
-        res = this.arrAvg(group.map((item) => item.payload.Energy));
+        res = this.arrSum(group.map((item) => item.payload.Energy));
       }
       if (this.state.lastData[3].timestamp === current) {
         result[9] =
-          (result[9] * this.state.lastData[3].count + res * group.length) /
-          (this.state.lastData[3].count + group.length);
+          result[9] * this.state.lastData[3].count + res * group.length;
         break;
       } else {
         newResults = [res, ...newResults];
@@ -431,8 +427,11 @@ class WaterConsumptionCard extends React.Component {
         showContent: true,
         triggerOn: "mousemove",
         trigger: "axis",
+        axisPointer: {
+          type: "none",
+        },
         formatter: (items) => {
-          return `${Math.round(items[0].value * 1000) / 1000} Litre/Hour`;
+          return `${Math.round(items[0].value * 1000) / 1000} Litre`;
         },
       },
       xAxis: {
