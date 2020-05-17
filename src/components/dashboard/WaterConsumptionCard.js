@@ -426,8 +426,14 @@ class WaterConsumptionCard extends React.Component {
         right: 15,
         bottom: 30,
       },
-      tooltips: {
-        enabled: false,
+      tooltip: {
+        show: true,
+        showContent: true,
+        triggerOn: "mousemove",
+        trigger: "axis",
+        formatter: (items) => {
+          return `${Math.round(items[0].value * 1000) / 1000} Litre/Hour`;
+        },
       },
       xAxis: {
         data: xAxisData[type],

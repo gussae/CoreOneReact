@@ -84,7 +84,6 @@ export const SubscribeSensor = (device_id) => {
       })
     ).subscribe({
       next: (response) => {
-        console.log("response", response);
         const sensor = response.value.data.onUpdateCoreOneIncomingDataValue;
         if (sensor && sensor.device_id === device_id) {
           sensor.payload = JSON.parse(sensor.payload);
