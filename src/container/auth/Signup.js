@@ -16,7 +16,7 @@ class Signup extends React.Component {
       password: "",
       confirmPassword: "",
       phone: "",
-      error: ""
+      error: "",
     };
   }
 
@@ -32,7 +32,7 @@ class Signup extends React.Component {
           </Icon>
         </div>
         <div className="content sign-up">
-          <form onSubmit={e => this.signUp(e)}>
+          <form onSubmit={(e) => this.signUp(e)}>
             <div className="middle">
               <img src={logo} width="30" alt="logo" />
               <div className="font-light color-main mb-3">
@@ -44,7 +44,7 @@ class Signup extends React.Component {
                   autoComplete="new-password"
                   maxLength="100"
                   value={this.state.name}
-                  onChange={e => this.setState({ name: e.target.value })}
+                  onChange={(e) => this.setState({ name: e.target.value })}
                   required
                   label="Name"
                 />
@@ -54,7 +54,7 @@ class Signup extends React.Component {
                   autoComplete="new-password"
                   maxLength="100"
                   value={this.state.surname}
-                  onChange={e => this.setState({ surname: e.target.value })}
+                  onChange={(e) => this.setState({ surname: e.target.value })}
                   required
                   label="Surname"
                 />
@@ -64,7 +64,7 @@ class Signup extends React.Component {
                   autoComplete="new-password"
                   maxLength="200"
                   value={this.state.email}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ email: e.target.value.toLowerCase() })
                   }
                   required
@@ -76,7 +76,7 @@ class Signup extends React.Component {
                   className="app-style"
                   autoComplete="new-password"
                   value={this.state.password}
-                  onChange={e => this.setState({ password: e.target.value })}
+                  onChange={(e) => this.setState({ password: e.target.value })}
                   required
                   type="password"
                   label="Password"
@@ -86,7 +86,7 @@ class Signup extends React.Component {
                   className="app-style"
                   autoComplete="new-password"
                   value={this.state.confirmPassword}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ confirmPassword: e.target.value })
                   }
                   required
@@ -98,7 +98,7 @@ class Signup extends React.Component {
                   className="app-style"
                   autoComplete="new-password"
                   value={this.state.phone}
-                  onChange={e => this.setState({ phone: e.target.value })}
+                  onChange={(e) => this.setState({ phone: e.target.value })}
                   required
                   type="number"
                   label="Phone"
@@ -126,7 +126,7 @@ class Signup extends React.Component {
     );
   }
 
-  signUp = async e => {
+  signUp = async (e) => {
     e.preventDefault();
     const {
       name,
@@ -134,7 +134,7 @@ class Signup extends React.Component {
       surname,
       phone,
       password,
-      confirmPassword
+      confirmPassword,
     } = this.state;
 
     this.setState({ loading: true, error: "" });
@@ -151,9 +151,10 @@ class Signup extends React.Component {
         password: password,
         attributes: {
           name: name,
+          family_name: surname,
           phone_number: tel,
-          preferred_username: surname
-        }
+          preferred_username: surname,
+        },
       });
       this.props.history.push("/confirm-account", { email: email });
     } catch (e) {
