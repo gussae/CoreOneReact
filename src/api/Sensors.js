@@ -22,23 +22,38 @@ export const createCoreOneOutgoing = async (value) => {
     const res = await API.graphql(
       graphqlOperation(createCoreOneOutgoingData, value)
     );
-    console.log("created outgoing data: ", res);
+    //!
+    console.log(111, "created outgoing data: ", res);
   } catch (error) {
-    console.log(error);
+    //!
+    console.log(112, error);
   }
 };
 
 export const selectSensor = (sensor) => {
+  //!
+  console.log(222, "select sensor: ", sensor);
   return (dispatch) => {
     dispatch({ type: "SELECT_SENSOR", currentSensor: sensor });
   };
 };
 
 export const GetSensors = () => {
+  //!
+  console.log(100, "start", listCoreOneAssigneds);
   return async (dispatch, getState) => {
     try {
       // get devices id list
+      //!
+      console.log(
+        101,
+        "graphql operation",
+        graphqlOperation(listCoreOneAssigneds)
+      );
       const resCDs = await API.graphql(graphqlOperation(listCoreOneAssigneds));
+
+      //!
+      console.log(102, "resCDs", resCDs);
       const cds = resCDs.data.listCoreOneAssigneds.items;
 
       // get my devices list
@@ -46,6 +61,8 @@ export const GetSensors = () => {
         graphqlOperation(listCoreOneIncomingDatas)
       );
       let sensors = resSensors.data.listCoreOneIncomingDatas.items;
+      //!
+      console.log(330, "incoming data", listCoreOneIncomingDatas);
 
       let mysensors = [];
 
@@ -69,9 +86,12 @@ export const GetSensors = () => {
       }
 
       dispatch({ type: "GET_SENSORS_LIST", getSensorsList: mysensors });
+      //!
+      console.log(333, "created outgoing data: ", mysensors);
       return mysensors;
     } catch (error) {
-      console.log(error);
+      //!
+      console.log(334, error);
     }
   };
 };
@@ -95,11 +115,14 @@ export const SubscribeSensor = (device_id) => {
         }
       },
       error: (error) => {
-        console.log("error on sensor subscription", error);
+        //!
+        console.log(445, "error on sensor subscription", error);
       },
     });
-
+    //!
+    console.log(444, "device ID: ", device_id);
     return () => {
+      //!
       console.log("terminating subscription to sensor", device_id);
       subscriber.unsubscribe();
     };
