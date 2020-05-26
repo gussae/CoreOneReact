@@ -8,7 +8,6 @@ export const listCoreOneAssigneds = /* GraphQL */ `
         client_id
         device_id
         device_type
-        status_value
       }
       nextToken
     }
